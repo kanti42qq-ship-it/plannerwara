@@ -7,32 +7,10 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Firebase SDKs (v10.8.0) -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
-
-    // Firebase configuration[cite: 2]
-    const firebaseConfig = {
-      apiKey: "AIzaSyAoL4mmINcWiVD4JB2keDEZCHq6Ned83y0",
-      authDomain: "planner-f3651.firebaseapp.com",
-      projectId: "planner-f3651",
-      storageBucket: "planner-f3651.firebasestorage.app",
-      messagingSenderId: "866742028518",
-      appId: "1:866742028518:web:e18638667f4541e4d19327",
-      measurementId: "G-C3ZS2SM3XW"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-  </script>
-
   <style>
     body { font-family: 'Prompt', sans-serif; }
     .hidden-view { display: none !important; }
     
-    /* เอฟเฟกต์การ์ดนูนและเด้งดึ๋ง */
     .bounce-card {
       transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
     }
@@ -110,15 +88,12 @@
             <div class="grid grid-cols-7 text-center text-xs font-semibold text-slate-400 mb-2">
               <span class="text-red-400">อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span class="text-pink-400">ส</span>
             </div>
-            <!-- ช่องปฏิทินเต็มเดือน -->
             <div id="wara-calendar-days" class="grid grid-cols-7 gap-1 text-xs text-center"></div>
           </div>
 
-          <!-- จัดการกิจกรรมในวันที่เลือก -->
           <div class="bg-white rounded-3xl p-4 shadow-sm space-y-3">
             <h4 id="wara-selected-date-text" class="text-[#ff477e] font-bold text-center text-xs">จัดการกิจกรรม (คลิกเลือกวันที่ในปฏิทิน)</h4>
             
-            <!-- จานสีพาสเทล -->
             <div class="flex justify-center gap-1.5 py-1">
               <button onclick="selectColor('wara', '#ffb3c1')" class="color-btn-wara w-6 h-6 rounded-full bg-[#ffb3c1] ring-2 ring-pink-400" data-color="#ffb3c1"></button>
               <button onclick="selectColor('wara', '#ffc6ff')" class="color-btn-wara w-6 h-6 rounded-full bg-[#ffc6ff]" data-color="#ffc6ff"></button>
@@ -147,7 +122,6 @@
               <button onclick="showAddNoteModal('wara')" class="bg-[#ff758f] text-white text-xs font-semibold px-3 py-1.5 rounded-xl shadow-sm hover:bg-[#ff5e97] transition">+ เพิ่มโน้ตใหม่</button>
             </div>
 
-            <!-- ฟอร์มเพิ่มโน้ต -->
             <div id="wara-note-form" class="hidden-view bg-pink-50/60 p-3 rounded-2xl space-y-2.5 border border-pink-100 text-xs">
               <input type="text" id="wara-note-title" placeholder="หัวข้อโน้ต..." class="w-full bg-white border border-pink-200 rounded-xl px-3 py-1.5 font-semibold focus:outline-none">
               
@@ -169,7 +143,6 @@
               </div>
             </div>
 
-            <!-- รายการหัวข้อโน้ต -->
             <div id="wara-notes-list" class="space-y-2 max-h-[380px] overflow-y-auto pt-1"></div>
           </div>
         </div>
@@ -221,21 +194,18 @@
             <div class="grid grid-cols-7 text-center text-xs font-semibold text-slate-400 mb-2">
               <span class="text-red-400">อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span class="text-sky-400">ส</span>
             </div>
-            <!-- ช่องปฏิทินเต็มเดือน -->
             <div id="chen-calendar-days" class="grid grid-cols-7 gap-1 text-xs text-center"></div>
           </div>
 
-          <!-- จัดการกิจกรรม -->
           <div class="bg-[#1c2541] rounded-3xl p-4 border border-slate-700/50 space-y-3">
             <h4 id="chen-selected-date-text" class="text-sky-400 font-bold text-center text-xs">จัดการกิจกรรม (คลิกเลือกวันที่ในปฏิทิน)</h4>
             
-            <!-- จานสีพาสเทล -->
             <div class="flex justify-center gap-1.5 py-1">
               <button onclick="selectColor('chen', '#ff8a80')" class="color-btn-chen w-6 h-6 rounded-full bg-[#ff8a80] ring-2 ring-red-400" data-color="#ff8a80"></button>
               <button onclick="selectColor('chen', '#ff80ab')" class="color-btn-chen w-6 h-6 rounded-full bg-[#ff80ab]" data-color="#ff80ab"></button>
               <button onclick="selectColor('chen', '#ea80fc')" class="color-btn-chen w-6 h-6 rounded-full bg-[#ea80fc]" data-color="#ea80fc"></button>
               <button onclick="selectColor('chen', '#b388ff')" class="color-btn-chen w-6 h-6 rounded-full bg-[#b388ff]" data-color="#b388ff"></button>
-              <button onclick="selectColor('chen', '#8c9ffff')" class="color-btn-chen w-6 h-6 rounded-full bg-[#8c9eff]" data-color="#8c9eff"></button>
+              <button onclick="selectColor('chen', '#8c9eff')" class="color-btn-chen w-6 h-6 rounded-full bg-[#8c9eff]" data-color="#8c9eff"></button>
               <button onclick="selectColor('chen', '#80d8ff')" class="color-btn-chen w-6 h-6 rounded-full bg-[#80d8ff]" data-color="#80d8ff"></button>
               <button onclick="selectColor('chen', '#a7ffeb')" class="color-btn-chen w-6 h-6 rounded-full bg-[#a7ffeb]" data-color="#a7ffeb"></button>
               <button onclick="selectColor('chen', '#ccff90')" class="color-btn-chen w-6 h-6 rounded-full bg-[#ccff90]" data-color="#ccff90"></button>
@@ -250,7 +220,7 @@
           </div>
         </div>
 
-        <!-- แท็บ 2: ตารางเรียน (แนบไฟล์ภาพ) -->
+        <!-- แท็บ 2: ตารางเรียน -->
         <div id="chen-sub-schedule" class="hidden-view space-y-3">
           <div class="bg-[#1c2541] rounded-3xl p-4 border border-slate-700/50 space-y-3">
             <h4 class="text-sky-400 font-bold text-sm flex items-center justify-between">
@@ -267,7 +237,7 @@
           </div>
         </div>
 
-        <!-- แท็บ 3: การบ้าน & กำหนดส่ง -->
+        <!-- แท็บ 3: การบ้าน -->
         <div id="chen-sub-homework" class="hidden-view space-y-3">
           <div class="bg-[#1c2541] rounded-3xl p-4 border border-slate-700/50 space-y-3">
             <h4 class="text-sky-400 font-bold text-sm">📖 บันทึกการบ้าน & กำหนดส่ง</h4>
@@ -285,7 +255,7 @@
           </div>
         </div>
 
-        <!-- แท็บ 4: รหัสผ่าน (เพิ่มใหม่ฝั่งเชน) -->
+        <!-- แท็บ 4: รหัสผ่าน -->
         <div id="chen-sub-passwords" class="hidden-view space-y-3">
           <div class="bg-[#1c2541] rounded-3xl p-4 border border-slate-700/50 space-y-3">
             <h4 class="text-sky-400 font-bold text-sm">🔑 Spidey Secrets (บันทึกรหัสผ่าน)</h4>
@@ -312,18 +282,25 @@
 
   </div>
 
-  <!-- SCRIPT KERNEL -->
-  <script>
-    // --- STATE MANAGEMENT ---
-    let currentWaraDate = new Date();
-    let currentChenDate = new Date();
-    let selectedWaraDateStr = formatDateKey(new Date());
-    let selectedChenDateStr = formatDateKey(new Date());
-    let selectedWaraColor = '#ffb3c1';
-    let selectedChenColor = '#ff8a80';
+  <!-- SCRIPT KERNEL WITH FIREBASE FIRESTORE SYNC -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // LocalStorage Database
-    let db = JSON.parse(localStorage.getItem('couple_planner_db')) || {
+    const firebaseConfig = {
+      apiKey: "AIzaSyAoL4mmINcWiVD4JB2keDEZCHq6Ned83y0",
+      authDomain: "planner-f3651.firebaseapp.com",
+      projectId: "planner-f3651",
+      storageBucket: "planner-f3651.firebasestorage.app",
+      messagingSenderId: "866742028518",
+      appId: "1:866742028518:web:e18638667f4541e4d19327"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const dbFirestore = getFirestore(app);
+
+    // Global App State
+    window.db = {
       waraEvents: {},
       chenEvents: {},
       waraNotes: [],
@@ -333,9 +310,37 @@
       chenHomework: []
     };
 
-    function saveDB() {
-      localStorage.setItem('couple_planner_db', JSON.stringify(db));
-    }
+    // Realtime Sync จาก Firestore
+    onSnapshot(doc(dbFirestore, "planners", "shared_data"), (snapshot) => {
+      if (snapshot.exists()) {
+        window.db = snapshot.data();
+        renderCalendar('wara');
+        renderCalendar('chen');
+        renderNotes('wara');
+        renderPasswords('wara');
+        renderPasswords('chen');
+        renderScheduleImage();
+        renderHomework();
+      }
+    });
+
+    // บันทึกกลับขึ้น Firebase Firestore
+    window.saveDB = async function() {
+      try {
+        await setDoc(doc(dbFirestore, "planners", "shared_data"), window.db);
+      } catch (err) {
+        console.error("Save Error:", err);
+      }
+    };
+  </script>
+
+  <script>
+    let currentWaraDate = new Date();
+    let currentChenDate = new Date();
+    let selectedWaraDateStr = formatDateKey(new Date());
+    let selectedChenDateStr = formatDateKey(new Date());
+    let selectedWaraColor = '#ffb3c1';
+    let selectedChenColor = '#ff8a80';
 
     function formatDateKey(dateObj) {
       const y = dateObj.getFullYear();
@@ -346,7 +351,6 @@
 
     const monthNamesTH = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
 
-    // --- NAVIGATION ---
     function switchView(viewName) {
       document.getElementById('view-home').classList.add('hidden-view');
       document.getElementById('view-wara').classList.add('hidden-view');
@@ -383,7 +387,6 @@
 
     function switchChenTab(tabIndex) {
       document.getElementById('chen-sub-calendar').classList.add('hidden-view');
-      document.getElementById('chen-sub-[#sub-schedule]').classList?.add('hidden-view');
       document.getElementById('chen-sub-schedule').classList.add('hidden-view');
       document.getElementById('chen-sub-homework').classList.add('hidden-view');
       document.getElementById('chen-sub-passwords').classList.add('hidden-view');
@@ -411,14 +414,12 @@
       }
     }
 
-    // --- CALENDAR SYSTEM ( FULL MONTH & AUTOMATIC YEARS ) ---
     function renderCalendar(user) {
       const isWara = user === 'wara';
       const dateObj = isWara ? currentWaraDate : currentChenDate;
       const year = dateObj.getFullYear();
       const month = dateObj.getMonth();
 
-      // Update Month Year Text
       document.getElementById(`${user}-cal-month-year`).innerText = `${monthNamesTH[month]} ${year + 543}`;
 
       const firstDayOfMonth = new Date(year, month, 1).getDay();
@@ -428,7 +429,6 @@
       const container = document.getElementById(`${user}-calendar-days`);
       container.innerHTML = '';
 
-      // 1. วันของเดือนก่อนหน้า (เพื่อความสมบูรณ์ของสัปดาห์)
       for (let i = firstDayOfMonth - 1; i >= 0; i--) {
         const dayNum = daysInPrevMonth - i;
         const div = document.createElement('div');
@@ -437,15 +437,14 @@
         container.appendChild(div);
       }
 
-      // 2. วันในเดือนปัจจุบัน
-      const eventsObj = isWara ? db.waraEvents : db.chenEvents;
+      const eventsObj = isWara ? window.db.waraEvents : window.db.chenEvents;
       const selectedKey = isWara ? selectedWaraDateStr : selectedChenDateStr;
 
       for (let d = 1; d <= daysInMonth; d++) {
         const thisDateObj = new Date(year, month, d);
         const dateKey = formatDateKey(thisDateObj);
         const isSelected = dateKey === selectedKey;
-        const dayEvents = eventsObj[dateKey] || [];
+        const dayEvents = (eventsObj && eventsObj[dateKey]) || [];
 
         const div = document.createElement('div');
         div.onclick = () => selectCalendarDate(user, dateKey);
@@ -467,7 +466,6 @@
         container.appendChild(div);
       }
 
-      // 3. วันของเดือนถัดไป ให้ครบ 35 หรือ 42 ช่องเต็มตาราง
       const totalRendered = firstDayOfMonth + daysInMonth;
       const remainingSlots = (totalRendered > 35 ? 42 : 35) - totalRendered;
       for (let i = 1; i <= remainingSlots; i++) {
@@ -485,7 +483,6 @@
       const dateObj = isWara ? currentWaraDate : currentChenDate;
       const now = new Date();
       
-      // ปรับย้อนหลังได้ 2 ปี และล่วงหน้า 5 ปี + ปรับอัตโนมัติตามปีปัจจุบัน
       const minYear = now.getFullYear() - 2;
       const maxYear = now.getFullYear() + 5;
 
@@ -527,10 +524,16 @@
       const isWara = user === 'wara';
       const dateKey = isWara ? selectedWaraDateStr : selectedChenDateStr;
       const color = isWara ? selectedWaraColor : selectedChenColor;
-      const eventsObj = isWara ? db.waraEvents : db.chenEvents;
-
-      if (!eventsObj[dateKey]) eventsObj[dateKey] = [];
-      eventsObj[dateKey].push({ id: Date.now(), text, color });
+      
+      if (isWara) {
+        if (!window.db.waraEvents) window.db.waraEvents = {};
+        if (!window.db.waraEvents[dateKey]) window.db.waraEvents[dateKey] = [];
+        window.db.waraEvents[dateKey].push({ id: Date.now(), text, color });
+      } else {
+        if (!window.db.chenEvents) window.db.chenEvents = {};
+        if (!window.db.chenEvents[dateKey]) window.db.chenEvents[dateKey] = [];
+        window.db.chenEvents[dateKey].push({ id: Date.now(), text, color });
+      }
 
       saveDB();
       input.value = '';
@@ -538,8 +541,8 @@
     }
 
     function deleteCalendarEvent(user, dateKey, id) {
-      const eventsObj = user === 'wara' ? db.waraEvents : db.chenEvents;
-      if (eventsObj[dateKey]) {
+      const eventsObj = user === 'wara' ? window.db.waraEvents : window.db.chenEvents;
+      if (eventsObj && eventsObj[dateKey]) {
         eventsObj[dateKey] = eventsObj[dateKey].filter(ev => ev.id !== id);
         if (eventsObj[dateKey].length === 0) delete eventsObj[dateKey];
         saveDB();
@@ -550,14 +553,14 @@
     function renderSelectedEvents(user) {
       const isWara = user === 'wara';
       const dateKey = isWara ? selectedWaraDateStr : selectedChenDateStr;
-      const eventsObj = isWara ? db.waraEvents : db.chenEvents;
+      const eventsObj = isWara ? window.db.waraEvents : window.db.chenEvents;
       const listContainer = document.getElementById(`${user}-events-list`);
       
       const dParts = dateKey.split('-');
       const formattedDate = `${parseInt(dParts[2])} ${monthNamesTH[parseInt(dParts[1])-1]} ${parseInt(dParts[0])+543}`;
       document.getElementById(`${user}-selected-date-text`).innerText = `จัดการกิจกรรม ( ${formattedDate} )`;
 
-      const list = eventsObj[dateKey] || [];
+      const list = (eventsObj && eventsObj[dateKey]) || [];
       if (list.length === 0) {
         listContainer.innerHTML = `<p class="text-slate-400 text-center text-[11px] py-2">ไม่มีกิจกรรมสำหรับวันนี้</p>`;
         return;
@@ -571,8 +574,6 @@
       `).join('');
     }
 
-
-    // --- WARA NOTES SYSTEM (COLLAPSIBLE & LISTS) ---
     function showAddNoteModal(user) {
       document.getElementById(`${user}-note-form`).classList.remove('hidden-view');
     }
@@ -604,7 +605,8 @@
         content = rawList.map(t => ({ text: t, done: false }));
       }
 
-      db.waraNotes.push({ id: Date.now(), title, type, content });
+      if (!window.db.waraNotes) window.db.waraNotes = [];
+      window.db.waraNotes.push({ id: Date.now(), title, type, content });
       saveDB();
 
       document.getElementById(`${user}-note-title`).value = '';
@@ -620,7 +622,7 @@
     }
 
     function toggleCheckItem(noteId, itemIdx) {
-      const note = db.waraNotes.find(n => n.id === noteId);
+      const note = window.db.waraNotes.find(n => n.id === noteId);
       if (note && note.type === 'list') {
         note.content[itemIdx].done = !note.content[itemIdx].done;
         saveDB();
@@ -629,19 +631,20 @@
     }
 
     function deleteNote(id) {
-      db.waraNotes = db.waraNotes.filter(n => n.id !== id);
+      window.db.waraNotes = window.db.waraNotes.filter(n => n.id !== id);
       saveDB();
       renderNotes('wara');
     }
 
     function renderNotes(user) {
       const container = document.getElementById('wara-notes-list');
-      if (db.waraNotes.length === 0) {
+      const notes = window.db.waraNotes || [];
+      if (notes.length === 0) {
         container.innerHTML = `<p class="text-slate-400 text-center text-xs py-4">ยังไม่มีโน้ต กดปุ่มด้านบนเพื่อเพิ่มโน้ต</p>`;
         return;
       }
 
-      container.innerHTML = db.waraNotes.map(n => {
+      container.innerHTML = notes.map(n => {
         let bodyContent = '';
         if (n.type === 'text') {
           bodyContent = `<p class="text-xs text-slate-600 whitespace-pre-line leading-relaxed">${n.content || 'ไม่มีเนื้อหา'}</p>`;
@@ -675,8 +678,6 @@
       }).join('');
     }
 
-
-    // --- PASSWORDS SYSTEM ---
     function savePassword(user) {
       const titleInput = document.getElementById(`${user}-pass-title`);
       const valueInput = document.getElementById(`${user}-pass-value`);
@@ -685,18 +686,23 @@
 
       if (!title || !value) return alert('กรุณากรอกทั้งชื่อหัวข้อและรหัสผ่าน');
 
-      const passList = user === 'wara' ? db.waraPasswords : db.chenPasswords;
-      passList.push({ id: Date.now(), title, value });
+      if (user === 'wara') {
+        if (!window.db.waraPasswords) window.db.waraPasswords = [];
+        window.db.waraPasswords.push({ id: Date.now(), title, value });
+      } else {
+        if (!window.db.chenPasswords) window.db.chenPasswords = [];
+        window.db.chenPasswords.push({ id: Date.now(), title, value });
+      }
+      
       saveDB();
-
       titleInput.value = '';
       valueInput.value = '';
       renderPasswords(user);
     }
 
     function deletePassword(user, id) {
-      if (user === 'wara') db.waraPasswords = db.waraPasswords.filter(p => p.id !== id);
-      else db.chenPasswords = db.chenPasswords.filter(p => p.id !== id);
+      if (user === 'wara') window.db.waraPasswords = window.db.waraPasswords.filter(p => p.id !== id);
+      else window.db.chenPasswords = window.db.chenPasswords.filter(p => p.id !== id);
       saveDB();
       renderPasswords(user);
     }
@@ -708,7 +714,7 @@
 
     function renderPasswords(user) {
       const container = document.getElementById(`${user}-passwords-list`);
-      const passList = user === 'wara' ? db.waraPasswords : db.chenPasswords;
+      const passList = user === 'wara' ? (window.db.waraPasswords || []) : (window.db.chenPasswords || []);
       const isWara = user === 'wara';
 
       if (passList.length === 0) {
@@ -730,15 +736,13 @@
       `).join('');
     }
 
-
-    // --- CHEN SCHEDULE IMAGE ATTACHMENT ---
     function uploadScheduleImage(event) {
       const file = event.target.files[0];
       if (!file) return;
 
       const reader = new FileReader();
       reader.onload = function(e) {
-        db.chenScheduleImg = e.target.result;
+        window.db.chenScheduleImg = e.target.result;
         saveDB();
         renderScheduleImage();
       };
@@ -746,17 +750,17 @@
     }
 
     function deleteScheduleImage() {
-      db.chenScheduleImg = '';
+      window.db.chenScheduleImg = '';
       saveDB();
       renderScheduleImage();
     }
 
     function renderScheduleImage() {
       const container = document.getElementById('schedule-image-container');
-      if (db.chenScheduleImg) {
+      if (window.db.chenScheduleImg) {
         container.innerHTML = `
           <div class="relative w-full h-full flex flex-col items-center">
-            <img src="${db.chenScheduleImg}" class="w-full h-auto max-h-[420px] object-contain rounded-xl shadow-md">
+            <img src="${window.db.chenScheduleImg}" class="w-full h-auto max-h-[420px] object-contain rounded-xl shadow-md">
             <button onclick="deleteScheduleImage()" class="mt-2 bg-red-600/80 hover:bg-red-600 text-white text-xs px-3 py-1 rounded-xl">ลบรูปตารางสอน</button>
           </div>
         `;
@@ -765,15 +769,14 @@
       }
     }
 
-
-    // --- CHEN HOMEWORK SYSTEM ---
     function addHomework() {
       const title = document.getElementById('hw-title').value.trim();
       const dateVal = document.getElementById('hw-date').value;
 
       if (!title || !dateVal) return alert('กรุณากรอกทั้งชื่อการบ้านและวันกำหนดส่ง');
 
-      db.chenHomework.push({
+      if (!window.db.chenHomework) window.db.chenHomework = [];
+      window.db.chenHomework.push({
         id: Date.now(),
         title,
         dueDate: dateVal,
@@ -787,7 +790,7 @@
     }
 
     function toggleHomeworkStatus(id) {
-      const hw = db.chenHomework.find(h => h.id === id);
+      const hw = window.db.chenHomework.find(h => h.id === id);
       if (hw) {
         hw.done = !hw.done;
         saveDB();
@@ -796,14 +799,15 @@
     }
 
     function deleteHomework(id) {
-      db.chenHomework = db.chenHomework.filter(h => h.id !== id);
+      window.db.chenHomework = window.db.chenHomework.filter(h => h.id !== id);
       saveDB();
       renderHomework();
     }
 
     function renderHomework() {
       const container = document.getElementById('homework-list');
-      if (db.chenHomework.length === 0) {
+      const hwList = window.db.chenHomework || [];
+      if (hwList.length === 0) {
         container.innerHTML = `<p class="text-slate-400 text-center text-xs py-4">ไม่มีการบ้านที่ค้างอยู่</p>`;
         return;
       }
@@ -811,7 +815,7 @@
       const today = new Date();
       today.setHours(0,0,0,0);
 
-      container.innerHTML = db.chenHomework.map(hw => {
+      container.innerHTML = hwList.map(hw => {
         const dueObj = new Date(hw.dueDate);
         dueObj.setHours(0,0,0,0);
 
@@ -849,7 +853,6 @@
       }).join('');
     }
 
-    // INITIAL RENDER
     renderCalendar('wara');
     renderCalendar('chen');
   </script>
