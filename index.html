@@ -1403,3 +1403,19 @@ function nextMonth() {
 </script>
 </body>
 </html>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.card, [class*="card"]');
+    cards.forEach(card => {
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', function() {
+        // ซ่อนหน้าแรก แล้วแสดงเนื้อหาแพลนเนอร์
+        const landing = document.querySelector('.welcome-screen') || document.children[0];
+        const app = document.querySelector('.app-container') || document.querySelector('.main-content');
+        
+        document.body.classList.add('active');
+        if (app) app.style.display = 'block';
+      });
+    });
+  });
+</script>
