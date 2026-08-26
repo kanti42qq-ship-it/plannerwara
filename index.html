@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Couple Planner</title>
-    
+
     <!-- Font & Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mitr:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Mitr', 'Fredoka', sans-serif;
+            font-family: 'Mitr', sans-serif;
         }
 
         body {
@@ -27,35 +27,35 @@
             padding: 20px;
         }
 
-        /* ----- LANDING PAGE ----- */
-        .landing-page {
+        /* --- Welcome Landing Screen --- */
+        .welcome-screen {
             text-align: center;
             max-width: 600px;
             width: 100%;
             animation: fadeIn 0.8s ease-in-out;
         }
 
-        .landing-title {
-            font-size: 2rem;
+        .welcome-title {
+            font-size: 2.2rem;
             color: #d86979;
             margin-bottom: 8px;
-            font-weight: 600;
+            font-family: 'Fredoka', cursive, 'Mitr', sans-serif;
         }
 
-        .landing-subtitle {
+        .welcome-subtitle {
             font-size: 1.1rem;
             color: #8c8c8c;
             margin-bottom: 30px;
         }
 
-        .profiles-container {
+        .profiles-wrapper {
             display: flex;
             gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
         }
 
-        .card {
+        .profile-card {
             background: white;
             border-radius: 20px;
             padding: 30px 20px;
@@ -67,28 +67,22 @@
             position: relative;
         }
 
-        .card:hover {
+        .profile-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 15px 30px rgba(0,0,0,0.1);
         }
 
-        .card.wara-card {
+        .profile-card.wara {
             background: linear-gradient(145deg, #ffffff, #fff0f3);
         }
+        .profile-card.wara:hover { border-color: #ffb6c1; }
 
-        .card.wara-card:hover {
-            border-color: #ffb6c1;
-        }
-
-        .card.chen-card {
+        .profile-card.chen {
             background: linear-gradient(145deg, #ffffff, #f0f4ff);
         }
+        .profile-card.chen:hover { border-color: #a0c4ff; }
 
-        .card.chen-card:hover {
-            border-color: #a0c4ff;
-        }
-
-        .profile-badge {
+        .tag {
             font-size: 0.85rem;
             padding: 4px 12px;
             border-radius: 20px;
@@ -97,20 +91,13 @@
             font-weight: 500;
         }
 
-        .wara-card .profile-badge {
-            background: #ffe5ec;
-            color: #d86979;
-        }
-
-        .chen-card .profile-badge {
-            background: #e2eafc;
-            color: #4a6fa5;
-        }
+        .wara .tag { background: #ffe5ec; color: #d86979; }
+        .chen .tag { background: #e2eafc; color: #4a6fa5; }
 
         .profile-name {
             font-size: 1.8rem;
             margin-bottom: 10px;
-            font-weight: 600;
+            font-family: 'Fredoka', 'Mitr', sans-serif;
         }
 
         .profile-desc {
@@ -119,7 +106,7 @@
             margin-bottom: 20px;
         }
 
-        .enter-btn {
+        .btn-arrow {
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -131,18 +118,18 @@
             transition: transform 0.2s;
         }
 
-        .wara-card .enter-btn { background: #ff85a1; }
-        .chen-card .enter-btn { background: #6c5ce7; }
+        .wara .btn-arrow { background: #ff85a1; }
+        .chen .btn-arrow { background: #6c5ce7; }
 
-        .card:hover .enter-btn {
+        .profile-card:hover .btn-arrow {
             transform: scale(1.1);
         }
 
-        /* ----- MAIN CONTENT ----- */
-        .main-content {
+        /* --- Main Planner App (Hidden Initially) --- */
+        .app-container {
             display: none;
             width: 100%;
-            max-width: 900px;
+            max-width: 1000px;
             background: white;
             border-radius: 24px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
@@ -150,7 +137,7 @@
             animation: fadeIn 0.5s ease-in-out;
         }
 
-        .header {
+        .app-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -159,15 +146,16 @@
             border-bottom: 2px dashed #f0f0f0;
         }
 
-        .header-title {
-            font-size: 1.5rem;
+        .app-title {
+            font-size: 1.6rem;
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-family: 'Fredoka', 'Mitr', sans-serif;
         }
 
-        .back-btn {
+        .btn-switch {
             background: #f5f5f5;
             border: none;
             padding: 8px 16px;
@@ -175,20 +163,37 @@
             cursor: pointer;
             font-size: 0.9rem;
             transition: 0.2s;
+            color: #666;
         }
 
-        .back-btn:hover {
+        .btn-switch:hover {
             background: #e0e0e0;
         }
 
-        .section-box {
-            background: #fafafa;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
+        /* Responsive Layout Grid */
+        .planner-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
         }
 
-        .section-title {
+        @media (min-width: 768px) {
+            .planner-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .full-width {
+                grid-column: span 2;
+            }
+        }
+
+        .card-box {
+            background: #fafafa;
+            border-radius: 18px;
+            padding: 20px;
+            border: 1px solid #f0f0f0;
+        }
+
+        .box-header {
             font-size: 1.1rem;
             font-weight: 600;
             margin-bottom: 15px;
@@ -196,6 +201,130 @@
             align-items: center;
             gap: 8px;
         }
+
+        /* Calendar Styles */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+        }
+
+        .day-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #aaa;
+            padding: 5px 0;
+        }
+
+        .day-number {
+            padding: 10px 0;
+            font-size: 0.9rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .day-number:hover {
+            background: #e0e0e0;
+        }
+
+        .day-number.today {
+            background: #ff85a1;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Notes & Todo Styles */
+        .color-picker {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .color-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .color-dot.active {
+            border-color: #555;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            outline: none;
+        }
+
+        .btn-add {
+            background: #ff85a1;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .list-item {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+
+        /* Password Safe Styles */
+        .password-item {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Chen Specific Styles */
+        .schedule-upload {
+            border: 2px dashed #ccc;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        /* Themes */
+        body.theme-wara .app-title { color: #d86979; }
+        body.theme-wara .box-header { color: #ff85a1; }
+        body.theme-wara .btn-add { background: #ff85a1; }
+
+        body.theme-chen .app-title { color: #4a6fa5; }
+        body.theme-chen .box-header { color: #5c7cfa; }
+        body.theme-chen .btn-add { background: #5c7cfa; }
+        body.theme-chen .day-number.today { background: #5c7cfa; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -205,67 +334,228 @@
 </head>
 <body>
 
-    <!-- หน้าแรก เลือกโปรไฟล์ -->
-    <div class="landing-page" id="landingPage">
-        <h1 class="landing-title">❤️ แพลนเนอร์บันทึกกิจกรรม</h1>
-        <p class="landing-subtitle">Couple Planner</p>
+    <!-- Welcome / Landing Screen -->
+    <div class="welcome-screen" id="welcomeScreen">
+        <h1 class="welcome-title">❤️ แพลนเนอร์บันทึกกิจกรรม (วรา & เชน)</h1>
+        <p class="welcome-subtitle">Couple Planner</p>
 
-        <div class="profiles-container">
-            <!-- โปรไฟล์ วรา -->
-            <div class="card wara-card" onclick="selectUser('wara')">
-                <span class="profile-badge">🎀 Hello Kitty World</span>
-                <h2 class="profile-name">วรา</h2>
+        <div class="profiles-wrapper">
+            <!-- Profile Wara -->
+            <div class="profile-card wara" onclick="openPlanner('wara')">
+                <span class="tag">🎀 Hello Kitty World</span>
+                <h2 class="profile-name" style="color:#d86979;">วรา</h2>
                 <p class="profile-desc">ปฏิทิน / รหัสผ่าน / โน้ต</p>
-                <div class="enter-btn"><i class="fas fa-arrow-right"></i></div>
+                <div class="btn-arrow"><i class="fas fa-arrow-right"></i></div>
             </div>
 
-            <!-- โปรไฟล์ เชน -->
-            <div class="card chen-card" onclick="selectUser('chen')">
-                <span class="profile-badge">🕷️ Spidey Zone</span>
-                <h2 class="profile-name">เชน</h2>
+            <!-- Profile Chen -->
+            <div class="profile-card chen" onclick="openPlanner('chen')">
+                <span class="tag">🕷️ Spidey Zone</span>
+                <h2 class="profile-name" style="color:#4a6fa5;">เชน</h2>
                 <p class="profile-desc">ปฏิทิน / ตารางเรียน / การบ้าน / รหัสผ่าน / โน้ต</p>
-                <div class="enter-btn"><i class="fas fa-arrow-right"></i></div>
+                <div class="btn-arrow"><i class="fas fa-arrow-right"></i></div>
             </div>
         </div>
     </div>
 
-    <!-- หน้าเนื้อหาหลัก แพลนเนอร์ -->
-    <div class="main-content" id="mainContent">
-        <div class="header">
-            <h2 class="header-title" id="userTitle">🎀 Kitty Notes & Secrets</h2>
-            <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> สลับผู้ใช้</button>
+    <!-- Main Planner Application -->
+    <div class="app-container" id="appContainer">
+        <div class="app-header">
+            <h2 class="app-title" id="appTitle">🎀 Kitty Notes & Secrets</h2>
+            <button class="btn-switch" onclick="closePlanner()"><i class="fas fa-arrow-left"></i> สลับโปรไฟล์</button>
         </div>
 
-        <div class="section-box">
-            <h3 class="section-title"><i class="far fa-calendar-alt"></i> ปฏิทินบันทึกกิจกรรม</h3>
-            <p style="color: #666; font-size: 0.95rem;">ยินดีต้อนรับสู่แพลนเนอร์ของคุณ! ระบบพร้อมใช้งานแล้วครับ</p>
+        <div class="planner-grid">
+            
+            <!-- Calendar Section -->
+            <div class="card-box full-width">
+                <div class="calendar-header">
+                    <h3 class="box-header" style="margin:0;"><i class="far fa-calendar-alt"></i> ปฏิทินบันทึกกิจกรรม</h3>
+                    <div>
+                        <button class="btn-switch" onclick="prevMonth()">&lt;</button>
+                        <span id="currentMonthYear" style="font-weight:600; margin:0 10px;">สิงหาคม 2026</span>
+                        <button class="btn-switch" onclick="nextMonth()">&gt;</button>
+                    </div>
+                </div>
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Calendar days generated by JS -->
+                </div>
+            </div>
+
+            <!-- Note / Memo Section -->
+            <div class="card-box">
+                <h3 class="box-header"><i class="far fa-sticky-note"></i> โน้ตเตือนความจำ</h3>
+                <div class="color-picker">
+                    <div class="color-dot active" style="background:#ffadad;" onclick="selectColor(this, '#ffadad')"></div>
+                    <div class="color-dot" style="background:#ffd6a5;" onclick="selectColor(this, '#ffd6a5')"></div>
+                    <div class="color-dot" style="background:#fdffb6;" onclick="selectColor(this, '#fdffb6')"></div>
+                    <div class="color-dot" style="background:#caffbf;" onclick="selectColor(this, '#caffbf')"></div>
+                    <div class="color-dot" style="background:#9bf6ff;" onclick="selectColor(this, '#9bf6ff')"></div>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="noteInput" class="input-field" placeholder="เพิ่มข้อความโน้ต...">
+                    <button class="btn-add" onclick="addNote()"><i class="fas fa-plus"></i></button>
+                </div>
+                <div id="notesList">
+                    <div class="list-item" style="background:#fff0f3; border-left:4px solid #ff85a1;">
+                        <span>ซื้อของเข้าหอพัก 🛒</span>
+                        <i class="fas fa-trash-alt" style="color:#aaa; cursor:pointer;" onclick="this.parentElement.remove()"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Password Vault Section -->
+            <div class="card-box">
+                <h3 class="box-header"><i class="fas fa-key"></i> บันทึกรหัสผ่านส่วนตัว</h3>
+                <div class="input-group">
+                    <input type="text" id="passApp" class="input-field" placeholder="ชื่อแอป/เว็บ">
+                    <input type="password" id="passVal" class="input-field" placeholder="รหัสผ่าน">
+                    <button class="btn-add" onclick="addPassword()"><i class="fas fa-plus"></i></button>
+                </div>
+                <div id="passwordList">
+                    <div class="password-item">
+                        <div>
+                            <strong>Netflix</strong>
+                            <div style="font-size:0.8rem; color:#888;">user@gmail.com</div>
+                        </div>
+                        <span style="font-family:monospace; background:#eee; padding:2px 6px; border-radius:6px;">••••••••</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chen Specific: Timetable & Homework -->
+            <div class="card-box full-width" id="chenFeatures" style="display:none;">
+                <h3 class="box-header"><i class="fas fa-graduation-cap"></i> ตารางเรียน & รายการการบ้าน (สำหรับเชน)</h3>
+                <div class="planner-grid" style="grid-template-columns: 1fr 1fr;">
+                    <div>
+                        <p style="font-weight:600; margin-bottom:10px;">📸 ตารางเรียน</p>
+                        <div class="schedule-upload" onclick="document.getElementById('fileInput').click()">
+                            <i class="fas fa-cloud-upload-alt" style="font-size:2rem; margin-bottom:10px;"></i>
+                            <p>คลิกเพื่ออัปโหลดรูปตารางเรียน</p>
+                            <input type="file" id="fileInput" style="display:none" onchange="previewSchedule(this)">
+                        </div>
+                        <img id="schedulePreview" style="width:100%; margin-top:10px; border-radius:12px; display:none;">
+                    </div>
+                    <div>
+                        <p style="font-weight:600; margin-bottom:10px;">📝 รายการการบ้าน</p>
+                        <div class="input-group">
+                            <input type="text" id="hwInput" class="input-field" placeholder="การบ้านที่ต้องส่ง...">
+                            <button class="btn-add" onclick="addHomework()"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <div id="hwList">
+                            <div class="list-item">
+                                <span>รายงานการตลาด (ส่งอาทิตย์หน้า)</span>
+                                <input type="checkbox">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <script>
-        function selectUser(user) {
-            // ซ่อนหน้าแรก
-            document.getElementById('landingPage').style.display = 'none';
-            
-            // แสดงหน้าเนื้อหา
-            const mainContent = document.getElementById('mainContent');
-            mainContent.style.display = 'block';
+        let selectedColor = '#ffadad';
+        let currentUser = '';
 
-            // เปลี่ยนหัวข้อตามคนที่เลือก
-            const userTitle = document.getElementById('userTitle');
+        function openPlanner(user) {
+            currentUser = user;
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'block';
+
+            const appTitle = document.getElementById('appTitle');
+            const chenFeatures = document.getElementById('chenFeatures');
+
             if (user === 'wara') {
-                userTitle.innerHTML = '🎀 Kitty Notes & Secrets (วรา)';
-                userTitle.style.color = '#d86979';
+                document.body.className = 'theme-wara';
+                appTitle.innerHTML = '🎀 Kitty Notes & Secrets (วรา)';
+                chenFeatures.style.display = 'none';
             } else {
-                userTitle.innerHTML = '🕷️ Spidey Zone (เชน)';
-                userTitle.style.color = '#4a6fa5';
+                document.body.className = 'theme-chen';
+                appTitle.innerHTML = '🕷️ Spidey Zone (เชน)';
+                chenFeatures.style.display = 'block';
+            }
+
+            renderCalendar();
+        }
+
+        function closePlanner() {
+            document.body.className = '';
+            document.getElementById('welcomeScreen').style.display = 'block';
+            document.getElementById('appContainer').style.display = 'none';
+        }
+
+        function selectColor(el, color) {
+            document.querySelectorAll('.color-dot').forEach(dot => dot.classList.remove('active'));
+            el.classList.add('active');
+            selectedColor = color;
+        }
+
+        function addNote() {
+            const input = document.getElementById('noteInput');
+            if (!input.value.trim()) return;
+
+            const list = document.getElementById('notesList');
+            const item = document.createElement('div');
+            item.className = 'list-item';
+            item.style.background = selectedColor;
+            item.innerHTML = `<span>${input.value}</span><i class="fas fa-trash-alt" style="color:#666; cursor:pointer;" onclick="this.parentElement.remove()"></i>`;
+            list.appendChild(item);
+            input.value = '';
+        }
+
+        function addPassword() {
+            const app = document.getElementById('passApp');
+            const val = document.getElementById('passVal');
+            if (!app.value.trim() || !val.value.trim()) return;
+
+            const list = document.getElementById('passwordList');
+            const item = document.createElement('div');
+            item.className = 'password-item';
+            item.innerHTML = `<div><strong>${app.value}</strong></div><span style="font-family:monospace; background:#eee; padding:2px 6px; border-radius:6px;">${val.value}</span>`;
+            list.appendChild(item);
+            app.value = '';
+            val.value = '';
+        }
+
+        function addHomework() {
+            const input = document.getElementById('hwInput');
+            if (!input.value.trim()) return;
+
+            const list = document.getElementById('hwList');
+            const item = document.createElement('div');
+            item.className = 'list-item';
+            item.innerHTML = `<span>${input.value}</span><input type="checkbox">`;
+            list.appendChild(item);
+            input.value = '';
+        }
+
+        function previewSchedule(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('schedulePreview');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                }
+                reader.readAsDataURL(input.files[0]);
             }
         }
 
-        function goBack() {
-            // แสดงหน้าแรก ซ่อนหน้าเนื้อหา
-            document.getElementById('landingPage').style.display = 'block';
-            document.getElementById('mainContent').style.display = 'none';
+        function renderCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            const days = ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'];
+            
+            days.forEach(d => {
+                grid.innerHTML += `<div class="day-name">${d}</div>`;
+            });
+
+            for (let i = 1; i <= 31; i++) {
+                const isToday = i === 26 ? 'today' : '';
+                grid.innerHTML += `<div class="day-number ${isToday}">${i}</div>`;
+            }
         }
     </script>
 </body>
