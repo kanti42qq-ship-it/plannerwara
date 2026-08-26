@@ -1,1421 +1,272 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Couple Planner</title>
-
-<!-- Font & Icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mitr:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-<style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Mitr', sans-serif;
-    -webkit-tap-highlight-color: transparent;
-}
-
-body {
-    background-color: #0d1117;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 10px;
-}
-
-/* Phone Frame */
-.phone-container {
-    width: 100%;
-    max-width: 430px;
-    height: 890px;
-    background: #090c15;
-    border-radius: 52px;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.8), 0 0 0 12px #1a2035;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
-
-.screen {
-    display: none;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-    overflow-y: auto;
-    position: relative;
-    padding-top: 20px;
-    padding-bottom: 75px;
-}
-
-.screen.active {
-    display: flex;
-}
-
-/* Home Screen Gradient */
-#home-screen {
-    background: linear-gradient(180deg, #ff7ba9 0%, #ff5288 30%, #52a5ff 75%, #00d2ff 100%);
-    padding: 50px 22px 30px 22px;
-    align-items: center;
-}
-
-.home-badge {
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    padding: 6px 18px;
-    border-radius: 20px;
-    color: white;
-    font-size: 13.5px;
-    margin-bottom: 14px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.home-title {
-    font-family: 'Fredoka', cursive;
-    font-size: 44px;
-    color: white;
-    text-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    margin-bottom: 35px;
-}
-
-.cards-wrapper {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-}
-
-.card-item {
-    width: 100%;
-    height: 185px;
-    border-radius: 32px;
-    padding: 24px;
-    position: relative;
-    cursor: pointer;
-    transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    overflow: hidden;
-}
-
-.card-item:hover {
-    transform: translateY(-8px) scale(1.02);
-}
-
-.card-item:active {
-    transform: translateY(2px) scale(0.95) !important;
-}
-
-.card-kitty-home {
-    background: linear-gradient(135deg, #ff9ebb 0%, #ff3b7b 100%);
-    border: 2px solid rgba(255, 255, 255, 0.8);
-    color: white;
-    box-shadow: 0 12px 25px rgba(255, 59, 123, 0.35), inset 0 2px 5px rgba(255, 255, 255, 0.7);
-}
-
-.card-spidey-home {
-    background: linear-gradient(135deg, #ff3b68 0%, #2b50ed 100%);
-    border: 2px solid rgba(255, 255, 255, 0.8);
-    color: white;
-    box-shadow: 0 12px 25px rgba(43, 80, 237, 0.35), inset 0 2px 5px rgba(255, 255, 255, 0.7);
-}
-
-.card-tag {
-    background: rgba(255, 255, 255, 0.95);
-    padding: 6px 16px;
-    border-radius: 18px;
-    font-size: 13px;
-    font-weight: 600;
-    width: fit-content;
-    margin-bottom: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.card-kitty-home .card-tag { color: #ff3b7b; }
-.card-spidey-home .card-tag { color: #2b50ed; }
-
-.card-item h2 { 
-    font-size: 30px; 
-    font-weight: 600; 
-    margin-bottom: 4px; 
-    text-shadow: 0 2px 4px rgba(0,0,0,0.1); 
-}
-
-.card-subtext { 
-    font-size: 13px; 
-    opacity: 0.95; 
-    font-weight: 300;
-    letter-spacing: 0.2px;
-    padding-right: 60px; 
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.btn-arrow {
-    position: absolute;
-    right: 22px;
-    bottom: 22px;
-    width: 46px;
-    height: 46px;
-    background: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-}
-
-.card-kitty-home .btn-arrow { color: #ff3b7b; }
-.card-spidey-home .btn-arrow { color: #2b50ed; }
-
-/* Themes Header & App */
-.theme-kitty-bg { background: #fff0f4; }
-.theme-spidey-bg { background: #0f1623; }
-
-.top-nav-bar {
-    margin: 10px 18px 10px 18px;
-    padding: 12px 18px;
-    border-radius: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: white;
-}
-
-.kitty-bar { background: linear-gradient(90deg, #ff8dae, #ff5288); }
-.spidey-bar { background: linear-gradient(90deg, #ff3b68, #2b50ed); }
-
-.btn-home-back {
-    background: rgba(255,255,255,0.3);
-    border: none;
-    padding: 6px 14px;
-    border-radius: 12px;
-    color: white;
-    font-size: 12px;
-    cursor: pointer;
-}
-/* Sections Control */
-.app-section { display: none; }
-.app-section.active { display: block; }
-
-/* General Cards Layout */
-.ui-card {
-    background: white;
-    margin: 12px 18px;
-    padding: 18px;
-    border-radius: 24px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
-}
-.theme-spidey-bg .ui-card {
-    background: #192233;
-    color: white;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-}
-
-.card-header-title {
-    font-size: 16px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 14px;
-}
-.theme-kitty-bg .card-header-title { color: #c2185b; }
-.theme-spidey-bg .card-header-title { color: #4dabf7; }
-
-/* Calendar Cards */
-.cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.cal-header h3 { font-size: 17px; font-weight: 600; }
-.theme-kitty-bg .cal-header h3 { color: #d81b60; }
-.theme-spidey-bg .cal-header h3 { color: #4dabf7; }
-
-.cal-nav-btn {
-    background: rgba(0,0,0,0.05);
-    border: none;
-    width: 30px; height: 30px;
-    border-radius: 50%; cursor: pointer;
-}
-.theme-spidey-bg .cal-nav-btn { background: rgba(255,255,255,0.1); color: white; }
-
-.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
-.cal-day-label { font-size: 12px; font-weight: 600; color: #888; margin-bottom: 6px; }
-
-.cal-date-cell {
-    height: 54px; background: #f8f9fa; border-radius: 12px; padding: 4px;
-    font-size: 11px; display: flex; flex-direction: column; align-items: flex-start;
-    cursor: pointer; border: 2px solid transparent; overflow: hidden;
-}
-.theme-spidey-bg .cal-date-cell { background: #222e45; color: white; }
-.cal-date-cell.selected { border-color: #ff5288; background: #fff5f8; }
-.theme-spidey-bg .cal-date-cell.selected { border-color: #ff3b68; background: #2b1f35; }
-
-.cell-num { font-weight: 600; margin-bottom: 2px; }
-.cell-event-tag {
-    width: 100%; font-size: 8.5px; padding: 1px 3px; border-radius: 4px;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; color: #333;
-}
-
-.section-title { font-size: 15px; font-weight: 600; margin-bottom: 12px; text-align: center; }
-.theme-kitty-bg .section-title { color: #d81b60; }
-.theme-spidey-bg .section-title { color: #4dabf7; }
-
-.color-dots-row { display: flex; justify-content: center; gap: 8px; margin-bottom: 12px; }
-.color-circle { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; transition: transform 0.15s; }
-.color-circle.active { transform: scale(1.25); box-shadow: 0 0 0 2px #333; }
-
-.input-row { display: flex; gap: 8px; margin-bottom: 12px; }
-.input-field {
-    flex: 1; padding: 12px 16px; border-radius: 14px; border: 1px solid #eee; outline: none; font-size: 13px;
-}
-.theme-spidey-bg .input-field { background: #0f1623; border-color: #2e3c54; color: white; }
-
-.btn-action {
-    background: #ff5288; color: white; border: none; padding: 12px 18px;
-    border-radius: 14px; font-size: 13px; font-weight: 600; cursor: pointer;
-}
-.theme-spidey-bg .btn-action { background: linear-gradient(90deg, #ff3b68, #2b50ed); }
-
-.item-list-wrapper { display: flex; flex-direction: column; gap: 10px; }
-
-/* Vault Form */
-.vault-form-box { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
-.vault-form-box input {
-    width: 100%; padding: 12px 16px; border-radius: 14px; border: 1px solid #eee;
-    outline: none; font-size: 13.5px; background: #fff;
-}
-.theme-spidey-bg .vault-form-box input { background: #0f1623; border-color: #2e3c54; color: white; }
-
-.vault-card-item {
-    background: #f8f9fa; border-radius: 16px; padding: 14px 16px;
-    display: flex; align-items: center; justify-content: space-between; border-left: 5px solid #ff5288;
-}
-.theme-spidey-bg .vault-card-item { background: #222e45; border-left-color: #4dabf7; }
-
-.vault-info { display: flex; flex-direction: column; gap: 2px; }
-.vault-name { font-weight: 600; font-size: 14px; }
-.theme-kitty-bg .vault-name { color: #d81b60; }
-.theme-spidey-bg .vault-name { color: #4dabf7; }
-
-.vault-pass { font-size: 13px; color: #666; letter-spacing: 0.5px; }
-.theme-spidey-bg .vault-pass { color: #cbd5e1; }
-
-.btn-full {
-    width: 100%; background: #ff5288; color: white; border: none;
-    padding: 14px; border-radius: 18px; font-size: 14.5px; font-weight: 500; cursor: pointer;
-}
-.theme-spidey-bg .btn-full { background: linear-gradient(90deg, #ff3b68, #2b50ed); }
-
-.item-row {
-    display: flex; align-items: center; justify-content: space-between;
-    background: #f8f9fa; padding: 12px 16px; border-radius: 14px; font-size: 13.5px;
-    transition: all 0.2s ease;
-}
-.theme-spidey-bg .item-row { background: #222e45; }
-
-/* Homework Styles */
-.hw-input-container { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
-.hw-date-picker {
-    padding: 10px 14px; border-radius: 12px; border: 1px solid #2e3c54;
-    background: #0f1623; color: #4dabf7; font-size: 12.5px; outline: none;
-}
-.hw-item-left { display: flex; align-items: center; gap: 12px; cursor: pointer; flex: 1; user-select: none; }
-.hw-checkbox {
-    width: 22px; height: 22px; border-radius: 7px; border: 2px solid #4dabf7;
-    display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; flex-shrink: 0;
-}
-.hw-checkbox i { font-size: 12px; color: white; display: none; }
-.hw-info-box { display: flex; flex-direction: column; gap: 2px; }
-.hw-text { font-size: 14px; transition: all 0.2s ease; }
-.hw-due { font-size: 11.5px; opacity: 0.7; }
-
-.hw-item-done .hw-checkbox { background: #4dabf7; border-color: #4dabf7; }
-.hw-item-done .hw-checkbox i { display: block; }
-.hw-item-done .hw-text { text-decoration: line-through; opacity: 0.5; }
-.hw-item-done .hw-due { text-decoration: line-through; opacity: 0.4; }
-
-.hw-urgent {
-    background: #3b1119 !important; border: 1.5px solid #ff4d4d;
-    box-shadow: 0 0 10px rgba(255, 77, 77, 0.2);
-}
-.hw-urgent .hw-text { color: #ff4d4d !important; font-weight: 700 !important; }
-.hw-urgent .hw-due { color: #ff6b6b !important; font-weight: 600; }
-.hw-urgent .hw-checkbox { border-color: #ff4d4d; }
-
-.urgent-badge {
-    background: #ff4d4d; color: white; font-size: 10px; font-weight: 700;
-    padding: 2px 6px; border-radius: 6px; margin-left: 6px; display: inline-block;
-    animation: pulse 1.5s infinite;
-}
-@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
-
-/* Schedule Photo Container Ratio 3:2 */
-.schedule-photo-container {
-    width: 100%; aspect-ratio: 3 / 2; border: 2px dashed #3e4c67;
-    border-radius: 20px; display: flex; flex-direction: column; align-items: center;
-    justify-content: center; overflow: hidden; position: relative; background: #0f1623;
-}
-.schedule-photo-container img { width: 100%; height: 100%; object-fit: contain; background-color: #000; }
-.upload-placeholder { display: flex; flex-direction: column; align-items: center; gap: 10px; color: #8899ac; text-align: center; padding: 20px; }
-.upload-placeholder i { font-size: 40px; color: #4dabf7; }
-.photo-actions { display: flex; gap: 10px; margin-top: 12px; }
-.btn-photo {
-    flex: 1; padding: 10px; border-radius: 14px; border: none; background: #222e45;
-    color: #4dabf7; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
-}
-
-/* NOTES SECTION - IPHONE ESSAY STYLE UPDATE */
-.type-selector-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 12px;
-}
-.type-btn {
-    flex: 1;
-    padding: 8px;
-    border-radius: 12px;
-    border: 1px solid #ddd;
-    background: #fff;
-    font-size: 12px;
-    cursor: pointer;
-    text-align: center;
-    color: #666;
-}
-.theme-spidey-bg .type-btn {
-    background: #0f1623;
-    border-color: #2e3c54;
-    color: #8899ac;
-}
-.type-btn.active {
-    border-color: #ff5288;
-    background: #fff0f4;
-    color: #ff5288;
-    font-weight: 600;
-}
-.theme-spidey-bg .type-btn.active {
-    border-color: #4dabf7;
-background: #192a45;
-    color: #4dabf7;
-}
-
-/* Title Cards (หน้าสรุปรายการ) */
-.note-summary-card {
-    background: #f8f9fa;
-    border-radius: 18px;
-    padding: 16px 18px;
-    border-left: 5px solid #ff5288;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-.theme-spidey-bg .note-summary-card {
-    background: #222e45;
-    border-left-color: #4dabf7;
-    color: white;
-}
-.note-summary-card:active {
-    transform: scale(0.98);
-}
-
-.note-summary-info {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    max-width: 80%;
-}
-
-.note-summary-title {
-    font-size: 15px;
-    font-weight: 600;
-}
-
-.note-summary-preview {
-    font-size: 12px;
-    opacity: 0.6;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.note-summary-meta {
-    font-size: 11px;
-    opacity: 0.5;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 2px;
-}
-
-/* Detail Screen (หน้าอ่านเนื้อหาความเรียงแบบ iPhone) */
-.note-detail-box {
-    display: none;
-}
-.note-detail-box.active {
-    display: block;
-}
-
-.btn-note-back {
-    background: none;
-    border: none;
-    color: #ff5288;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 12px;
-}
-.theme-spidey-bg .btn-note-back { color: #4dabf7; }
-
-/* iPhone Essay Container */
-.essay-container {
-    background: #fdfdfd;
-    border-radius: 16px;
-    padding: 18px;
-    min-height: 220px;
-    font-size: 14.5px;
-    line-height: 1.7;
-    color: #222;
-    white-space: pre-wrap; /* รักษารูปแบบการขึ้นบรรทัดใหม่ */
-    word-break: break-word;
-    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
-}
-.theme-spidey-bg .essay-container {
-    background: #121926;
-    color: #e2e8f0;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
-}
-
-.essay-textarea {
-    width: 100%;
-    min-height: 150px;
-    padding: 12px;
-    border-radius: 14px;
-    border: 1px solid #ddd;
-    outline: none;
-    font-size: 14px;
-    line-height: 1.6;
-    resize: vertical;
-    font-family: 'Mitr', sans-serif;
-}
-.theme-spidey-bg .essay-textarea {
-    background: #0f1623;
-    border-color: #2e3c54;
-    color: white;
-}
-
-/* Checklist Mode Styles */
-.note-items-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.note-item-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    font-size: 14px;
-    user-select: none;
-    background: #f8f9fa;
-    padding: 10px 14px;
-    border-radius: 12px;
-}
-.theme-spidey-bg .note-item-row { background: #222e45; }
-
-.iphone-circle {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    border: 2px solid #ccc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-}
-.theme-spidey-bg .iphone-circle { border-color: #4a5c7d; }
-
-.note-item-row.done .iphone-circle {
-    background: #ff5288;
-    border-color: #ff5288;
-}
-.theme-spidey-bg .note-item-row.done .iphone-circle {
-    background: #4dabf7;
-    border-color: #4dabf7;
-}
-
-.iphone-circle i {
-    font-size: 10px;
-    color: white;
-    display: none;
-}
-.note-item-row.done .iphone-circle i { display: block; }
-
-.note-item-text { transition: all 0.2s ease; }
-.note-item-row.done .note-item-text {
-    text-decoration: line-through;
-    opacity: 0.4;
-}
-
-.add-item-input-row {
-    display: flex;
-    gap: 6px;
-    margin-top: 14px;
-}
-.add-item-input {
-    flex: 1;
-    padding: 10px 14px;
-    border-radius: 12px;
-    border: 1px solid #eee;
-    font-size: 13px;
-    outline: none;
-}
-.theme-spidey-bg .add-item-input {
-    background: #0f1623;
-    border-color: #2e3c54;
-    color: white;
-}
-
-/* Bottom Tab Bar */
-.bottom-tab-bar {
-    position: absolute; bottom: 0; left: 0; right: 0; height: 65px;
-    background: white; display: flex; justify-around: space-around; align-items: center;
-    border-top: 1px solid #eee;
-}
-.theme-spidey-bg .bottom-tab-bar { background: #192233; border-top-color: #2e3c54; }
-
-.tab-btn {
-    display: flex; flex-direction: column; align-items: center; gap: 2px;
-    font-size: 10.5px; color: #999; cursor: pointer; flex: 1; text-align: center;
-}
-.tab-btn i { font-size: 17px; }
-.theme-kitty-bg .tab-btn.active { color: #ff5288; font-weight: 600; }
-.theme-spidey-bg .tab-btn.active { color: #4dabf7; font-weight: 600; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Couple Planner</title>
+    
+    <!-- Font & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mitr:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Mitr', 'Fredoka', sans-serif;
+        }
+
+        body {
+            background-color: #fdfbf7;
+            color: #4a4a4a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* ----- LANDING PAGE ----- */
+        .landing-page {
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .landing-title {
+            font-size: 2rem;
+            color: #d86979;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .landing-subtitle {
+            font-size: 1.1rem;
+            color: #8c8c8c;
+            margin-bottom: 30px;
+        }
+
+        .profiles-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 20px;
+            width: 240px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .card.wara-card {
+            background: linear-gradient(145deg, #ffffff, #fff0f3);
+        }
+
+        .card.wara-card:hover {
+            border-color: #ffb6c1;
+        }
+
+        .card.chen-card {
+            background: linear-gradient(145deg, #ffffff, #f0f4ff);
+        }
+
+        .card.chen-card:hover {
+            border-color: #a0c4ff;
+        }
+
+        .profile-badge {
+            font-size: 0.85rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .wara-card .profile-badge {
+            background: #ffe5ec;
+            color: #d86979;
+        }
+
+        .chen-card .profile-badge {
+            background: #e2eafc;
+            color: #4a6fa5;
+        }
+
+        .profile-name {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .profile-desc {
+            font-size: 0.85rem;
+            color: #7d7d7d;
+            margin-bottom: 20px;
+        }
+
+        .enter-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            color: white;
+            transition: transform 0.2s;
+        }
+
+        .wara-card .enter-btn { background: #ff85a1; }
+        .chen-card .enter-btn { background: #6c5ce7; }
+
+        .card:hover .enter-btn {
+            transform: scale(1.1);
+        }
+
+        /* ----- MAIN CONTENT ----- */
+        .main-content {
+            display: none;
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 30px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px dashed #f0f0f0;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-btn {
+            background: #f5f5f5;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+
+        .back-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .section-box {
+            background: #fafafa;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
 
-<div class="phone-container">
+    <!-- หน้าแรก เลือกโปรไฟล์ -->
+    <div class="landing-page" id="landingPage">
+        <h1 class="landing-title">❤️ แพลนเนอร์บันทึกกิจกรรม</h1>
+        <p class="landing-subtitle">Couple Planner</p>
 
-    <!-- HOME SCREEN -->
-    <div class="screen active" id="home-screen">
-        <div class="home-badge">❤️ แพลนเนอร์บันทึกกิจกรรม (วรา & เชน)</div>
-        <div class="home-title">Couple Planner</div>
-
-        <div class="cards-wrapper">
-            <!-- Kitty Card (วรา) -->
-            <div class="card-item card-kitty-home" onclick="switchUser('kitty')">
-                <div class="card-tag">🎀 Hello Kitty World</div>
-                <h2>วรา </h2>
-                <div class="card-subtext">ปฏิทิน / รหัสผ่าน / โน้ต</div>
-                <div class="btn-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+        <div class="profiles-container">
+            <!-- โปรไฟล์ วรา -->
+            <div class="card wara-card" onclick="selectUser('wara')">
+                <span class="profile-badge">🎀 Hello Kitty World</span>
+                <h2 class="profile-name">วรา</h2>
+                <p class="profile-desc">ปฏิทิน / รหัสผ่าน / โน้ต</p>
+                <div class="enter-btn"><i class="fas fa-arrow-right"></i></div>
             </div>
 
-            <!-- Spidey Card (เชน) -->
-            <div class="card-item card-spidey-home" onclick="switchUser('spidey')">
-                <div class="card-tag">🕷️ Spidey Zone</div>
-                <h2>เชน </h2>
-                <div class="card-subtext">ปฏิทิน / ตารางเรียน / การบ้าน / รหัสผ่าน / โน้ต</div>
-                <div class="btn-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+            <!-- โปรไฟล์ เชน -->
+            <div class="card chen-card" onclick="selectUser('chen')">
+                <span class="profile-badge">🕷️ Spidey Zone</span>
+                <h2 class="profile-name">เชน</h2>
+                <p class="profile-desc">ปฏิทิน / ตารางเรียน / การบ้าน / รหัสผ่าน / โน้ต</p>
+                <div class="enter-btn"><i class="fas fa-arrow-right"></i></div>
             </div>
         </div>
     </div>
 
-    <!-- MAIN APP SCREEN -->
-    <div class="screen" id="app-screen">
-        <div class="top-nav-bar" id="top-bar">
-            <span id="top-title">🎀 Kitty Notes & Secrets</span>
-            <button class="btn-home-back" onclick="goHome()"><i class="fa-solid fa-house"></i> หน้าแรก</button>
+    <!-- หน้าเนื้อหาหลัก แพลนเนอร์ -->
+    <div class="main-content" id="mainContent">
+        <div class="header">
+            <h2 class="header-title" id="userTitle">🎀 Kitty Notes & Secrets</h2>
+            <button class="back-btn" onclick="goBack()"><i class="fas fa-arrow-left"></i> สลับผู้ใช้</button>
         </div>
 
-        <!-- MENU 1: CALENDAR -->
-        <div class="app-section active" id="sec-calendar">
-            <div class="ui-card">
-                <div class="cal-header">
-                    <h3 id="cal-month-title">สิงหาคม 2026</h3>
-                    <div>
-                        <button class="cal-nav-btn" onclick="prevMonth()"><i class="fa-solid fa-chevron-left"></i></button>
-                        <button class="cal-nav-btn" onclick="nextMonth()"><i class="fa-solid fa-chevron-right"></i></button>
-                    </div>
-                </div>
-                <div class="cal-grid" id="cal-grid"></div>
-            </div>
-
-            <div class="ui-card">
-                <div class="section-title" id="manager-title">จัดการข้อความ ( 4 สิงหาคม )</div>
-                <div style="font-size:11px; color:#888; margin-bottom:6px;">เลือกสีบันทึก:</div>
-                <div class="color-dots-row" id="color-picker-row"></div>
-                <div class="input-row">
-                    <input type="text" id="event-input" class="input-field" placeholder="+ บันทึกกิจกรรม...">
-                    <button class="btn-action" onclick="addEvent()">เพิ่ม</button>
-                </div>
-                <div class="item-list-wrapper" id="event-list"></div>
-            </div>
+        <div class="section-box">
+            <h3 class="section-title"><i class="far fa-calendar-alt"></i> ปฏิทินบันทึกกิจกรรม</h3>
+            <p style="color: #666; font-size: 0.95rem;">ยินดีต้อนรับสู่แพลนเนอร์ของคุณ! ระบบพร้อมใช้งานแล้วครับ</p>
         </div>
-
-        <!-- MENU 2: VAULT -->
-        <div class="app-section" id="sec-vault">
-            <div class="ui-card">
-                <div class="card-header-title">
-                    <i class="fa-solid fa-lock" style="color: #ff5288;"></i>
-                    <span id="vault-card-title">บันทึกรหัสผ่านส่วนตัว</span>
-                </div>
-                
-                <div class="vault-form-box">
-                    <input type="text" id="vault-name-input" placeholder="ชื่อรหัสผ่าน ">
-                    <input type="text" id="vault-pass-input" placeholder="ตัวเลข/รหัสผ่าน">
-                    <button class="btn-full" onclick="addVaultItem()">Save</button>
-                </div>
-
-                <div class="item-list-wrapper" id="vault-list" style="margin-top:15px;"></div>
-            </div>
-        </div>
-
-        <!-- MENU 3: NOTES (ปรับให้จดแบบความเรียงเหมือน iPhone) -->
-        <div class="app-section" id="sec-notes">
-            <div class="ui-card">
-                <div class="card-header-title">
-                    <i class="fa-solid fa-note-sticky" style="color: #ff5288;"></i>
-                    <span id="note-menu-title">โน้ต</span>
-                </div>
-
-                <!-- OVERVIEW LIST VIEW (แสดงเฉพาะหัวข้อ + พรีวิวข้อความ) -->
-                <div id="notes-overview-view">
-                    <div class="type-selector-row">
-                        <div class="type-btn active" id="btn-type-text" onclick="setNoteType('text')">
-                            📝 ข้อความ
-                        </div>
-                        <div class="type-btn" id="btn-type-check" onclick="setNoteType('checklist')">
-                            ☑️ เช็กลิสต์ 
-                        </div>
-                    </div>
-
-                    <div class="input-row" style="margin-bottom:15px;">
-                        <input type="text" id="new-note-box-title" class="input-field" placeholder="+ ชื่อหัวข้อโน้ตใหม่...">
-                        <button class="btn-action" onclick="createNoteBox()">สร้างกล่อง</button>
-                    </div>
-
-                    <div class="item-list-wrapper" id="notes-summary-list"></div>
-                </div>
-
-                <!-- DETAIL VIEW (อ่านและแก้ไขความเรียงสไตล์ iPhone) -->
-                <div class="note-detail-box" id="notes-detail-view">
-                    <button class="btn-note-back" onclick="closeNoteDetail()">
-                        <i class="fa-solid fa-chevron-left"></i> ย้อนกลับไปรายการโน้ต
-                    </button>
-                    <div class="card-header-title" style="margin-bottom: 4px;">
-                        <span id="detail-note-title" style="font-size:18px;"></span>
-                    </div>
-                    <div class="note-summary-meta" id="detail-note-badge" style="margin-bottom:12px;"></div>
-
-                    <!-- แบบความเรียง (Text Essay Mode) -->
-                    <div id="mode-text-essay" style="display:none;">
-                        <div class="essay-container" id="essay-display-box" onclick="enableEssayEdit()"></div>
-                        
-                        <div id="essay-edit-box" style="display:none; margin-top:10px;">
-                            <textarea id="essay-textarea-input" class="essay-textarea" placeholder="พิมพ์เนื้อหาข้อความตรงนี้..."></textarea>
-                            <button class="btn-full" style="margin-top:10px;" onclick="saveEssayContent()">บันทึกข้อความ</button>
-                        </div>
-                    </div>
-
-                    <!-- แบบเช็กลิสต์ (Checklist Mode) -->
-                    <div id="mode-checklist" style="display:none;">
-                        <div class="note-items-list" id="detail-items-list"></div>
-                        <div class="add-item-input-row">
-                            <input type="text" class="add-item-input" id="input-detail-item" placeholder="+ เพิ่มรายการเช็กลิสต์...">
-                            <button class="btn-action" onclick="addNoteItemFromDetail()">เพิ่ม</button>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-
-        <!-- MENU 4 FOR SHANE: SCHEDULE -->
-        <div class="app-section" id="sec-schedule">
-            <div class="ui-card">
-                <div class="card-header-title">
-                    <i class="fa-solid fa-image" style="color: #4dabf7;"></i>
-                    <span>ตารางเรียน (เชน)</span>
-                </div>
-                
-                <input type="file" id="schedule-file-input" accept="image/*" style="display: none;" onchange="handleScheduleUpload(event)">
-                
-                <div class="schedule-photo-container" id="schedule-container">
-                    <div class="upload-placeholder" id="schedule-placeholder">
-                        <i class="fa-solid fa-cloud-arrow-up"></i>
-                        <span style="font-size:13px;">ยังไม่มีภาพตารางเรียน</span>
-                        <span style="font-size:11px; opacity:0.7;">กดปุ่มด้านล่างเพื่ออัปโหลดรูปภาพ</span>
-                    </div>
-                    <img id="schedule-img" src="" alt="ตารางเรียน" style="display: none;">
-                </div>
-
-                <div class="photo-actions">
-                    <button class="btn-photo" onclick="document.getElementById('schedule-file-input').click()">
-                        <i class="fa-solid fa-upload"></i> <span id="upload-btn-text">แนบภาพตารางเรียน</span>
-                    </button>
-                    <button class="btn-photo" style="color:#ff6b6b; display:none;" id="remove-photo-btn" onclick="removeSchedulePhoto()">
-                        <i class="fa-solid fa-trash"></i> ลบภาพ
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- MENU 5 FOR SHANE: HOMEWORK -->
-        <div class="app-section" id="sec-homework">
-            <div class="ui-card">
-                <div class="card-header-title">
-                    <i class="fa-solid fa-pen-to-square" style="color: #4dabf7;"></i>
-                    <span>รายการการบ้าน (เชน)</span>
-                </div>
-
-                <div class="hw-input-container">
-                    <input type="text" id="hw-input" class="input-field" placeholder="+ เพิ่มรายการการบ้าน...">
-                    <div style="display:flex; gap:8px;">
-                        <input type="date" id="hw-date-input" class="hw-date-picker" style="flex:1;">
-                        <button class="btn-action" onclick="addHomework()">บันทึก</button>
-                    </div>
-                </div>
-
-                <div class="item-list-wrapper" id="hw-list" style="margin-top:15px;"></div>
-            </div>
-        </div>
-
-        <!-- Dynamic Bottom Tabs -->
-        <div class="bottom-tab-bar" id="bottom-bar-container"></div>
     </div>
 
-</div>
-<script>
-let currentUser = 'kitty';
-let selectedDay = 4;
-let currentMonth = 7;
-let currentYear = 2026;
-let selectedColor = '#ffb3ba';
-let selectedNoteType = 'text'; 
-let activeBoxIndex = null; 
-
-const colors = ['#ffb3ba', '#ff6b6b', '#ffb86c', '#f1d1b5', '#d4a373', '#bae6fd', '#b9fbc0', '#e8ae52'];
-
-let eventsData = {
-    'kitty-2026-7-4': [
-        { text: 'เตรียมกุ้งและแซลมอนสำหรับดอง...', color: '#ffb3ba' },
-        { text: 'ซื้อน้ำดองซีอิ๊ว งาขาว เข้าบ้าน', color: '#f1d1b5' }
-    ]
-};
-
-let notesData = {
-    'kitty': [
-        {
-            title: '📝 สูตรทำน้ำดองซีอิ๊วเกาหลี',
-            type: 'text',
-            content: "ส่วนผสมหลัก:\n- ซีอิ๊วเกาหลี 1 ถ้วย\n- น้ำตาลทราย 2 ช้อนโต๊ะ\n- กระเทียมสับ และพริกจินดาตามชอบ\n\nวิธีทำ:\n1. ผสมส่วนผสมเข้าด้วยกัน ตั้งไฟอ่อนพอให้น้ำตาลละลาย\n2. พักไว้ให้เย็นสนิท ก่อนเทลงกุ้งและแซลมอนที่เตรียมไว้",
-            items: []
-        },
-        {
-            title: '🛍️ ของที่ต้องซื้อเข้าบ้าน',
-            type: 'checklist',
-            content: '',
-            items: [
-                { text: 'น้ำดองซีอิ๊วเกาหลี', done: true },
-                { text: 'งาขาวคั่ว', done: true },
-                { text: 'พริกสด / กระเทียม', done: false }
-            ]
-        }
-    ],
-    'spidey': [
-        {
-            title: '📝 บันทึกทั่วไป',
-            type: 'text',
-            content: "รหัสล็อกเกอร์สนามฟุตบอล: 8842\nนัดเตะบอลวันเสาร์นี้เวลา 17:00 น.",
-            items: []
-        }
-    ]
-};
-
-let homeworkData = {
-    'spidey': [
-        { text: 'ส่งรายงานคณิตศาสตร์', dueDate: '2026-08-14', done: false },
-        { text: 'ทำการบ้านภาษาไทย หน้า 42', dueDate: '2026-08-20', done: true }
-    ]
-};
-
-let vaultData = {
-    'kitty': [{ name: 'Facebook', pass: 'WaraPass2026' }],
-    'spidey': [{ name: 'Facebook', pass: 'ShanePass2026' }]
-};
-
-function switchUser(user) {
-    currentUser = user;
-    document.getElementById('home-screen').classList.remove('active');
-    const appScreen = document.getElementById('app-screen');
-    appScreen.classList.add('active');
-
-    const topBar = document.getElementById('top-bar');
-    const topTitle = document.getElementById('top-title');
-
-    if (user === 'kitty') {
-        appScreen.className = 'screen active theme-kitty-bg';
-        topBar.className = 'top-nav-bar kitty-bar';
-        topTitle.innerText = '🎀 Kitty Notes & Secrets';
-        document.getElementById('vault-card-title').innerText = 'บันทึกรหัสผ่านส่วนตัว (วรา)';
-        document.getElementById('note-menu-title').innerText = 'โน้ต (วรา)';
-    } else {
-        appScreen.className = 'screen active theme-spidey-bg';
-        topBar.className = 'top-nav-bar spidey-bar';
-        topTitle.innerText = '🕷️ Spidey Zone';
-        document.getElementById('vault-card-title').innerText = 'บันทึกรหัสผ่านส่วนตัว (เชน)';
-        document.getElementById('note-menu-title').innerText = 'โน้ต (เชน)';
-    }
-
-    renderBottomBar();
-    switchTab('calendar');
-    renderColorPicker();
-    renderCalendar();
-    renderEvents();
-    renderVault();
-    closeNoteDetail();
-    renderNotesOverview();
-    if (user === 'spidey') {
-        renderHomework();
-        loadSchedulePhoto();
-    }
-}
-
-function renderBottomBar() {
-    const bar = document.getElementById('bottom-bar-container');
-    if (currentUser === 'kitty') {
-        bar.innerHTML = `
-            <div class="tab-btn active" id="tab-calendar" onclick="switchTab('calendar')">
-                <i class="fa-solid fa-calendar-days"></i><span>ปฏิทิน</span>
-            </div>
-            <div class="tab-btn" id="tab-vault" onclick="switchTab('vault')">
-                <i class="fa-solid fa-key"></i><span>รหัสผ่าน</span>
-            </div>
-            <div class="tab-btn" id="tab-notes" onclick="switchTab('notes')">
-                <i class="fa-solid fa-note-sticky"></i><span>โน้ต</span>
-            </div>
-        `;
-    } else {
-        bar.innerHTML = `
-            <div class="tab-btn active" id="tab-calendar" onclick="switchTab('calendar')">
-                <i class="fa-solid fa-calendar-days"></i><span>ปฏิทิน</span>
-            </div>
-            <div class="tab-btn" id="tab-schedule" onclick="switchTab('schedule')">
-                <i class="fa-solid fa-image"></i><span>ตารางเรียน</span>
-            </div>
-            <div class="tab-btn" id="tab-homework" onclick="switchTab('homework')">
-                <i class="fa-solid fa-book-bookmark"></i><span>การบ้าน</span>
-            </div>
-            <div class="tab-btn" id="tab-vault" onclick="switchTab('vault')">
-                <i class="fa-solid fa-key"></i><span>รหัสผ่าน</span>
-            </div>
-            <div class="tab-btn" id="tab-notes" onclick="switchTab('notes')">
-                <i class="fa-solid fa-note-sticky"></i><span>โน้ต</span>
-            </div>
-        `;
-    }
-}
-
-function goHome() {
-    document.getElementById('app-screen').classList.remove('active');
-    document.getElementById('home-screen').classList.add('active');
-}
-
-function switchTab(tabName) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    const btn = document.getElementById(`tab-${tabName}`);
-    if (btn) btn.classList.add('active');
-
-    document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
-    const sec = document.getElementById(`sec-${tabName}`);
-    if (sec) sec.classList.add('active');
-
-    if (tabName === 'notes') {
-        closeNoteDetail();
-        renderNotesOverview();
-    }
-}
-
-/* SCHEDULE PHOTO LOGIC */
-function handleScheduleUpload(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const imageData = e.target.result;
-            localStorage.setItem('shane_schedule_photo', imageData);
-            displaySchedulePhoto(imageData);
-        };
-        reader.readAsDataURL(file);
-    }
-}
-
-function displaySchedulePhoto(src) {
-    const img = document.getElementById('schedule-img');
-    const placeholder = document.getElementById('schedule-placeholder');
-    const uploadText = document.getElementById('upload-btn-text');
-    const removeBtn = document.getElementById('remove-photo-btn');
-
-    if (src) {
-        img.src = src;
-        img.style.display = 'block';
-        placeholder.style.display = 'none';
-        uploadText.innerText = 'เปลี่ยนรูปตารางเรียน';
-        removeBtn.style.display = 'flex';
-    } else {
-        img.src = '';
-        img.style.display = 'none';
-        placeholder.style.display = 'flex';
-        uploadText.innerText = 'แนบภาพตารางเรียน';
-        removeBtn.style.display = 'none';
-    }
-}
-
-function loadSchedulePhoto() {
-    const savedPhoto = localStorage.getItem('shane_schedule_photo');
-    displaySchedulePhoto(savedPhoto);
-}
-
-function removeSchedulePhoto() {
-    localStorage.removeItem('shane_schedule_photo');
-    document.getElementById('schedule-file-input').value = '';
-    displaySchedulePhoto(null);
-}
-
-/* CALENDAR LOGIC */
-function renderColorPicker() {
-    const row =
-document.getElementById('color-picker-row');
-    row.innerHTML = '';
-    colors.forEach(c => {
-        const activeClass = c === selectedColor ? 'active' : '';
-        row.innerHTML += `<div class="color-circle ${activeClass}" style="background:${c};" onclick="selectColor('${c}')"></div>`;
-    });
-}
-
-function selectColor(c) {
-    selectedColor = c;
-    renderColorPicker();
-}
-
-function renderCalendar() {
-    const monthNames = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
-    document.getElementById('cal-month-title').innerText = `${monthNames[currentMonth]} ${currentYear}`;
-
-    const grid = document.getElementById('cal-grid');
-    grid.innerHTML = '';
-
-    const days = ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'];
-    days.forEach(d => {
-        grid.innerHTML += `<div class="cal-day-label">${d}</div>`;
-    });
-
-    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-    const totalDays = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-    for (let i = 0; i < firstDay; i++) grid.innerHTML += `<div></div>`;
-
-    for (let day = 1; day <= totalDays; day++) {
-        const key = `${currentUser}-${currentYear}-${currentMonth}-${day}`;
-        const dayEvents = eventsData[key] || [];
-        const isSelected = day === selectedDay ? 'selected' : '';
-
-        let tagsHtml = '';
-        dayEvents.forEach(e => {
-            tagsHtml += `<div class="cell-event-tag" style="background:${e.color}">${e.text}</div>`;
-        });
-
-        grid.innerHTML += `
-            <div class="cal-date-cell ${isSelected}" onclick="selectDate(${day})">
-                <span class="cell-num">${day}</span>
-                ${tagsHtml}
-            </div>
-        `;
-    }
-}
-
-function selectDate(day) {
-    selectedDay = day;
-    const monthNames = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
-    document.getElementById('manager-title').innerText = `จัดการข้อความ ( ${day} ${monthNames[currentMonth]} )`;
-    renderCalendar();
-    renderEvents();
-}
-
-function renderEvents() {
-    const key = `${currentUser}-${currentYear}-${currentMonth}-${selectedDay}`;
-    const list = eventsData[key] || [];
-    const container = document.getElementById('event-list');
-    container.innerHTML = '';
-
-    list.forEach((item, idx) => {
-        container.innerHTML += `
-            <div class="item-row">
-                <div style="display:flex; align-items:center; gap:8px;">
-                    <div style="width:10px; height:10px; border-radius:50%; background:${item.color}"></div>
-                    <span>${item.text}</span>
-                </div>
-                <i class="fa-solid fa-trash" style="color:#aaa; cursor:pointer;" onclick="deleteEvent(${idx})"></i>
-            </div>
-        `;
-    });
-}
-
-function addEvent() {
-    const input = document.getElementById('event-input');
-    if (!input.value.trim()) return;
-
-    const key = `${currentUser}-${currentYear}-${currentMonth}-${selectedDay}`;
-    if (!eventsData[key]) eventsData[key] = [];
-
-    eventsData[key].push({ text: input.value.trim(), color: selectedColor });
-    input.value = '';
-    renderCalendar();
-    renderEvents();
-}
-
-function deleteEvent(idx) {
-    const key = `${currentUser}-${currentYear}-${currentMonth}-${selectedDay}`;
-    eventsData[key].splice(idx, 1);
-    renderCalendar();
-    renderEvents();
-}
-
-/* VAULT LOGIC */
-function renderVault() {
-    const list = vaultData[currentUser] || [];
-    const container = document.getElementById('vault-list');
-    container.innerHTML = '';
-
-    list.forEach((item, idx) => {
-        container.innerHTML += `
-            <div class="vault-card-item">
-                <div class="vault-info">
-                    <span class="vault-name">🔑 ${item.name}</span>
-                    <span class="vault-pass">รหัสผ่าน: ${item.pass}</span>
-                </div>
-                <i class="fa-solid fa-trash" style="color:#aaa; cursor:pointer;" onclick="deleteVaultItem(${idx})"></i>
-            </div>
-        `;
-    });
-}
-
-function addVaultItem() {
-    const nameInput = document.getElementById('vault-name-input');
-    const passInput = document.getElementById('vault-pass-input');
-
-    if (!nameInput.value.trim() || !passInput.value.trim()) return;
-
-    if (!vaultData[currentUser]) vaultData[currentUser] = [];
-    vaultData[currentUser].push({
-        name: nameInput.value.trim(),
-        pass: passInput.value.trim()
-    });
-
-    nameInput.value = '';
-    passInput.value = '';
-    renderVault();
-}
-
-function deleteVaultItem(idx) {
-    vaultData[currentUser].splice(idx, 1);
-    renderVault();
-}
-
-/* IPHONE ESSAY STYLE NOTES LOGIC */
-function setNoteType(type) {
-    selectedNoteType = type;
-    document.getElementById('btn-type-text').classList.toggle('active', type === 'text');
-    document.getElementById('btn-type-check').classList.toggle('active', type === 'checklist');
-}
-
-function renderNotesOverview() {
-    const list = notesData[currentUser] || [];
-    const container = document.getElementById('notes-summary-list');
-    container.innerHTML = '';
-
-    list.forEach((box, idx) => {
-        const isChecklist = box.type === 'checklist';
-        const typeBadge = isChecklist ? '☑️ เช็กลิสต์' : '📝 ความเรียง';
-        
-        let previewText = '';
-        if (isChecklist) {
-            previewText = `${box.items.length} รายการ`;
-        } else {
-            previewText = box.content ? box.content.split('\n')[0] : 'ยังไม่มีเนื้อหา (แตะเพื่อพิมพ์)';
-        }
-
-        container.innerHTML += `
-            <div class="note-summary-card" onclick="openNoteDetail(${idx})">
-                <div class="note-summary-info">
-                    <span class="note-summary-title">${box.title}</span>
-                    <span class="note-summary-preview">${previewText}</span>
-                    <span class="note-summary-meta">${typeBadge}</span>
-                </div>
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <i class="fa-solid fa-chevron-right" style="color:#aaa; font-size:12px;"></i>
-                    <i class="fa-solid fa-trash" style="color:#ff6b6b; cursor:pointer; font-size:13.5px;" onclick="event.stopPropagation(); deleteNoteBox(${idx})"></i>
-                </div>
-            </div>
-        `;
-    });
-}
-
-function createNoteBox() {
-    const input = document.getElementById('new-note-box-title');
-    if (!input.value.trim()) return;
-
-    if (!notesData[currentUser]) notesData[currentUser] = [];
-    notesData[currentUser].push({
-        title: input.value.trim(),
-        type: selectedNoteType,
-        content: selectedNoteType === 'text' ? '' : '',
-        items: []
-    });
-
-    input.value = '';
-    renderNotesOverview();
-}
-
-function deleteNoteBox(idx) {
-    notesData[currentUser].splice(idx, 1);
-    renderNotesOverview();
-}
-
-function openNoteDetail(boxIdx) {
-    activeBoxIndex = boxIdx;
-    const box = notesData[currentUser][boxIdx];   
- document.getElementById('notes-overview-view').style.display = 'none';
-    const detailView = document.getElementById('notes-detail-view');
-    detailView.classList.add('active');
-
-    document.getElementById('detail-note-title').innerText = box.title;
-    document.getElementById('detail-note-badge').innerText = box.type === 'checklist' ? '☑️ รูปแบบเช็กลิสต์' : '📝 รูปแบบความเรียงสไตล์ iPhone';
-
-    if (box.type === 'text') {
-        document.getElementById('mode-text-essay').style.display = 'block';
-        document.getElementById('mode-checklist').style.display = 'none';
-        renderEssayView();
-    } else {
-        document.getElementById('mode-text-essay').style.display = 'none';
-        document.getElementById('mode-checklist').style.display = 'block';
-        renderChecklistItems();
-    }
-}
-
-function closeNoteDetail() {
-    activeBoxIndex = null;
-    document.getElementById('notes-overview-view').style.display = 'block';
-    document.getElementById('notes-detail-view').classList.remove('active');
-}
-
-/* ESSAY TEXT LOGIC */
-function renderEssayView() {
-    if (activeBoxIndex === null) return;
-    const box = notesData[currentUser][activeBoxIndex];
-    const displayBox = document.getElementById('essay-display-box');
-    const editBox = document.getElementById('essay-edit-box');
-
-    editBox.style.display = 'none';
-    displayBox.style.display = 'block';
-
-    if (box.content && box.content.trim() !== '') {
-        displayBox.innerText = box.content;
-    } else {
-        displayBox.innerHTML = '<span style="opacity:0.4; font-style:italic;">แตะตรงนี้เพื่อเริ่มพิมพ์โน้ตความเรียง...</span>';
-    }
-}
-
-function enableEssayEdit() {
-    if (activeBoxIndex === null) return;
-    const box = notesData[currentUser][activeBoxIndex];
-    const displayBox = document.getElementById('essay-display-box');
-    const editBox = document.getElementById('essay-edit-box');
-    const input = document.getElementById('essay-textarea-input');
-
-    displayBox.style.display = 'none';
-    editBox.style.display = 'block';
-    input.value = box.content || '';
-    input.focus();
-}
-
-function saveEssayContent() {
-    if (activeBoxIndex === null) return;
-    const input = document.getElementById('essay-textarea-input');
-    notesData[currentUser][activeBoxIndex].content = input.value;
-    renderEssayView();
-    renderNotesOverview();
-}
-
-/* CHECKLIST LOGIC */
-function renderChecklistItems() {
-    if (activeBoxIndex === null) return;
-    const box = notesData[currentUser][activeBoxIndex];
-    const container = document.getElementById('detail-items-list');
-    container.innerHTML = '';
-
-    box.items.forEach((item, itemIdx) => {
-        const doneClass = item.done ? 'done' : '';
-        container.innerHTML += `
-            <div class="note-item-row ${doneClass}" onclick="toggleNoteCheck(${itemIdx})">
-                <div class="iphone-circle"><i class="fa-solid fa-check"></i></div>
-                <span class="note-item-text" style="flex:1;">${item.text}</span>
-                <i class="fa-solid fa-xmark" style="color:#aaa; cursor:pointer; font-size:13px;" onclick="event.stopPropagation(); deleteDetailItem(${itemIdx})"></i>
-            </div>
-        `;
-    });
-}
-
-function addNoteItemFromDetail() {
-    if (activeBoxIndex === null) return;
-    const input = document.getElementById('input-detail-item');
-    if (!input.value.trim()) return;
-
-    notesData[currentUser][activeBoxIndex].items.push({ text: input.value.trim(), done: false });
-    input.value = '';
-    renderChecklistItems();
-    renderNotesOverview();
-}
-
-function toggleNoteCheck(itemIdx) {
-    if (activeBoxIndex === null) return;
-    const item = notesData[currentUser][activeBoxIndex].items[itemIdx];
-    item.done = !item.done;
-    renderChecklistItems();
-}
-
-function deleteDetailItem(itemIdx) {
-    if (activeBoxIndex === null) return;
-    notesData[currentUser][activeBoxIndex].items.splice(itemIdx, 1);
-    renderChecklistItems();
-    renderNotesOverview();
-}
-
-/* HOMEWORK LOGIC FOR SHANE */
-function renderHomework() {
-    const list = homeworkData[currentUser] || [];
-    const container = document.getElementById('hw-list');
-    container.innerHTML = '';
-
-    const today = new Date();
-    today.setHours(0,0,0,0);
-
-    list.forEach((hw, idx) => {
-        const isDone = hw.done;
-        const text = hw.text;
-        const dueDateStr = hw.dueDate;
-
-        let dueText = 'ไม่ได้ระบุวันส่ง';
-        let isUrgent = false;
-
-        if (dueDateStr) {
-            const due = new Date(dueDateStr);
-            due.setHours(0,0,0,0);
-            const diffDays = Math.ceil((due - today) / (1000 * 60 * 60 * 24));
-            const options = { day: 'numeric', month: 'short' };
-            const formattedDate = due.toLocaleDateString('th-TH', options);
-
-            if (diffDays < 0) {
-                dueText = `ส่งวันที่ ${formattedDate} (เลยกำหนดแล้ว!)`;
-                isUrgent = true;
-            } else if (diffDays === 0) {
-                dueText = `ส่งวันนี้! (${formattedDate})`;
-                isUrgent = true;
-            } else if (diffDays === 1) {
-                dueText = `ส่งพรุ่งนี้! (${formattedDate})`;
-                isUrgent = true;
-            } else if (diffDays <= 2) {
-                dueText = `ส่งอีก ${diffDays} วัน (${formattedDate})`;
-                isUrgent = true;
+    <script>
+        function selectUser(user) {
+            // ซ่อนหน้าแรก
+            document.getElementById('landingPage').style.display = 'none';
+            
+            // แสดงหน้าเนื้อหา
+            const mainContent = document.getElementById('mainContent');
+            mainContent.style.display = 'block';
+
+            // เปลี่ยนหัวข้อตามคนที่เลือก
+            const userTitle = document.getElementById('userTitle');
+            if (user === 'wara') {
+                userTitle.innerHTML = '🎀 Kitty Notes & Secrets (วรา)';
+                userTitle.style.color = '#d86979';
             } else {
-                dueText = `กำหนดส่ง ${formattedDate}`;
+                userTitle.innerHTML = '🕷️ Spidey Zone (เชน)';
+                userTitle.style.color = '#4a6fa5';
             }
         }
 
-        const doneClass = isDone ? 'hw-item-done' : '';
-        const urgentClass = (!isDone && isUrgent) ? 'hw-urgent' : '';
-        const badgeHtml = (!isDone && isUrgent) ? <span class="urgent-badge">ด่วน!</span> : '';
-
-        container.innerHTML += `
-            <div class="item-row ${doneClass} ${urgentClass}">
-                <div class="hw-item-left" onclick="toggleHomework(${idx})">
-                    <div class="hw-checkbox"><i class="fa-solid fa-check"></i></div>
-                    <div class="hw-info-box">
-                        <span class="hw-text">📚 ${text} ${badgeHtml}</span>
-                        <span class="hw-due"><i class="fa-regular fa-clock"></i> ${dueText}</span>
-                    </div>
-                </div>
-                <i class="fa-solid fa-trash" style="color:#aaa; cursor:pointer;" onclick="deleteHomework(${idx})"></i>
-            </div>
-        `;
-    });
-}
-
-function addHomework() {
-    const input = document.getElementById('hw-input');
-    const dateInput = document.getElementById('hw-date-input');
-
-    if (!input.value.trim()) return;
-
-    if (!homeworkData[currentUser]) homeworkData[currentUser] = [];
-    homeworkData[currentUser].push({
-        text: input.value.trim(),
-        dueDate: dateInput.value || null,
-        done: false
-    });
-
-    input.value = '';
-    dateInput.value = '';
-    renderHomework();
-}
-
-function toggleHomework(idx) {
-    homeworkData[currentUser][idx].done = !homeworkData[currentUser][idx].done;
-    renderHomework();
-}
-
-function deleteHomework(idx) {
-    homeworkData[currentUser].splice(idx, 1);
-    renderHomework();
-}
-
-function prevMonth() {
-    currentMonth--;
-    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
-    renderCalendar();
-}
-
-function nextMonth() {
-    currentMonth++;
-    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-    renderCalendar();
-}
-</script>
+        function goBack() {
+            // แสดงหน้าแรก ซ่อนหน้าเนื้อหา
+            document.getElementById('landingPage').style.display = 'block';
+            document.getElementById('mainContent').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const cards = document.querySelectorAll('.card, [class*="card"]');
-    cards.forEach(card => {
-      card.style.cursor = 'pointer';
-      card.addEventListener('click', function() {
-        // ซ่อนหน้าแรก แล้วแสดงเนื้อหาแพลนเนอร์
-        const landing = document.querySelector('.welcome-screen') || document.children[0];
-        const app = document.querySelector('.app-container') || document.querySelector('.main-content');
-        
-        document.body.classList.add('active');
-        if (app) app.style.display = 'block';
-      });
-    });
-  });
-</script>
