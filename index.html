@@ -130,20 +130,20 @@
                   <input type="radio" name="wara-note-type" value="text" checked onchange="toggleNoteInputType('wara')"> โน้ตปกติ
                 </label>
                 <label class="flex items-center gap-1 cursor-pointer">
-                  <input type="radio" name="wara-note-type" value="list" onchange="toggleNoteInputType('wara')"> เช็กลิสต์ (ติ๊กถูก)
+                  <input type="radio" name="wara-note-type" value="list" onchange="toggleNoteInputType('wara')"> เช็กลิสต์ไอโฟน (เพิ่มได้รัวๆ)
                 </label>
               </div>
 
               <!-- โน้ตปกติ -->
               <textarea id="wara-note-content-text" rows="3" placeholder="เนื้อหาโน้ต..." class="w-full bg-white border border-pink-200 rounded-xl p-2.5 text-xs focus:outline-none"></textarea>
               
-              <!-- เช็กลิสต์แบบเพิ่มทีละข้อ -->
+              <!-- เช็กลิสต์แบบเพิ่มทีละข้อต่อเนื่อง -->
               <div id="wara-note-content-list-container" class="hidden-view space-y-2">
                 <div class="flex gap-2">
-                  <input type="text" id="wara-list-item-input" placeholder="พิมพ์ข้อความเช็กลิสต์..." class="flex-1 bg-white border border-pink-200 rounded-xl px-3 py-1.5 text-xs focus:outline-none" onkeypress="if(event.key === 'Y' || event.key === 'Enter') { addTempListItem(); event.preventDefault(); }">
-                  <button type="button" onclick="addTempListItem()" class="bg-pink-400 text-white px-3 py-1.5 rounded-xl text-xs font-medium">เพิ่มข้อ</button>
+                  <input type="text" id="wara-list-item-input" placeholder="พิมพ์รายการแล้วกด Enter หรือปุ่มเพิ่ม..." class="flex-1 bg-white border border-pink-200 rounded-xl px-3 py-1.5 text-xs focus:outline-none" onkeypress="if(event.key === 'Enter') { addTempListItem(); event.preventDefault(); }">
+                  <button type="button" onclick="addTempListItem()" class="bg-pink-400 text-white px-3 py-1.5 rounded-xl text-xs font-medium shrink-0">เพิ่มข้อ</button>
                 </div>
-                <div id="wara-temp-list-preview" class="space-y-1.5 bg-white/80 p-2 rounded-xl border border-pink-100 max-h-28 overflow-y-auto text-xs">
+                <div id="wara-temp-list-preview" class="space-y-1.5 bg-white/90 p-2.5 rounded-xl border border-pink-100 max-h-36 overflow-y-auto text-xs">
                   <p class="text-slate-400 text-[11px] text-center">ยังไม่มีรายการในเช็กลิสต์</p>
                 </div>
               </div>
@@ -318,7 +318,6 @@
     const app = initializeApp(firebaseConfig);
     const dbFirestore = getFirestore(app);
 
-    // Global App State
     window.db = {
       waraEvents: {},
       chenEvents: {},
@@ -329,7 +328,6 @@
       chenHomework: []
     };
 
-    // Realtime Sync จาก Firestore
     onSnapshot(doc(dbFirestore, "planners", "shared_data"), (snapshot) => {
       if (snapshot.exists()) {
         window.db = snapshot.data();
@@ -343,7 +341,6 @@
       }
     });
 
-    // บันทึกกลับขึ้น Firebase Firestore
     window.saveDB = async function() {
       try {
         await setDoc(doc(dbFirestore, "planners", "shared_data"), window.db);
@@ -637,16 +634,16 @@
     function renderTempListPreview() {
       const container = document.getElementById('wara-temp-list-preview');
       if (tempWaraListItems.length === 0) {
-        container.innerHTML = `<p class="text-slate-400 text-[11px] text-center">ยังไม่มีรายการในเช็กลิสต์</p>`;
+        container.innerHTML = `<p class="text-slate-400 text-[11px] text-center">ยังไม่มีรายการในเช็กลิสต์ (พิมพ์เพิ่มด้านบนได้เลย)</p>`;
         return;
       }
       container.innerHTML = tempWaraListItems.map((item, idx) => `
-        <div class="flex items-center justify-between bg-white px-2 py-1 rounded-lg border border-pink-100 text-xs">
+        <div class="flex items-center justify-between bg-white px-2.5 py-1.5 rounded-lg border border-pink-100 text-xs">
           <div class="flex items-center gap-2">
-            <span class="w-3.5 h-3.5 rounded-full border border-pink-400 inline-block"></span>
+            <span class="w-3 h-3 rounded-full border border-pink-400 inline-block shrink-0"></span>
             <span class="text-slate-700">${item.text}</span>
           </div>
-          <button type="button" onclick="removeTempListItem(${idx})" class="text-slate-300 hover:text-red-500 text-[10px]">✕</button>
+          <button type="button" onclick="removeTempListItem(${idx})" class="text-slate-300 hover:text-red-500 text-[11px] font-bold px-1">✕</button>
         </div>
       `).join('');
     }
@@ -708,11 +705,11 @@
         if (n.type === 'text') {
           bodyContent = `<p class="text-xs text-slate-600 whitespace-pre-line leading-relaxed">${n.content || 'ไม่มีเนื้อหา'}</p>`;
         } else {
-          bodyContent = `<div class="space-y-2 text-xs">` + 
+          bodyContent = `<div class="space-y-2 text-xs max-h-60 overflow-y-auto pr-1">` + 
             n.content.map((item, idx) => `
-              <div onclick="toggleCheckItem(${n.id}, ${idx})" class="flex items-center gap-2.5 cursor-pointer select-none group">
+              <div onclick="toggleCheckItem(${n.id}, ${idx})" class="flex items-center gap-2.5 cursor-pointer select-none group bg-pink-50/40 p-2 rounded-xl border border-pink-100/60 hover:bg-pink-50 transition">
                 <input type="checkbox" ${item.done ? 'checked' : ''} class="w-4 h-4 rounded text-pink-500 focus:ring-pink-400 pointer-events-none">
-                <span class="${item.done ? 'line-through text-slate-400' : 'text-slate-700'}">${item.text}</span>
+                <span class="flex-1 ${item.done ? 'line-through text-slate-400' : 'text-slate-700 font-medium'}">${item.text}</span>
               </div>
             `).join('') + `</div>`;
         }
@@ -723,6 +720,7 @@
               <h5 class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
                 <span>${n.type === 'text' ? '📌' : '☑️'}</span>
                 <span>${n.title}</span>
+                ${n.type === 'list' ? `<span class="text-[10px] bg-pink-100 text-pink-600 px-2 py-0.5 rounded-full font-normal">(${n.content.length} ข้อ)</span>` : ''}
               </h5>
               <div class="flex items-center gap-2">
                 <span class="text-[10px] text-pink-400">จิ้มเพื่ออ่าน</span>
