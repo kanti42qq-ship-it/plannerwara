@@ -24,6 +24,12 @@
     .shadow-chen-3d {
       box-shadow: 0 15px 35px -5px rgba(14, 165, 233, 0.45), 0 5px 15px rgba(216, 27, 96, 0.4);
     }
+
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
   </style>
 </head>
 <body class="bg-gradient-to-br from-[#ff758c] via-[#ff7eb3] to-[#4facfe] min-h-screen flex justify-center items-center p-2 sm:p-4">
@@ -73,7 +79,15 @@
         <div id="wara-sub-calendar">
           <div class="bg-white rounded-3xl p-4 shadow-sm mb-3">
             <div class="flex justify-between items-center mb-3">
-              <h3 id="wara-cal-month-year" class="text-[#ff477e] font-bold text-base">สิงหาคม 2569</h3>
+              <!-- ส่วน Dropdown เลือกลัดเดือนและปี ฝั่งวรา -->
+              <div class="flex items-center gap-1 bg-pink-50 hover:bg-pink-100/80 px-2.5 py-1 rounded-2xl transition border border-pink-200/60 cursor-pointer">
+                <select id="wara-select-month" onchange="onDropdownMonthYearChange('wara')" class="bg-transparent text-[#ff477e] font-bold text-sm focus:outline-none cursor-pointer pr-1">
+                </select>
+                <select id="wara-select-year" onchange="onDropdownMonthYearChange('wara')" class="bg-transparent text-[#ff477e] font-bold text-sm focus:outline-none cursor-pointer">
+                </select>
+                <span class="text-[#ff477e] text-xs pointer-events-none">▾</span>
+              </div>
+
               <div class="flex gap-1">
                 <button onclick="changeMonth('wara', -1)" class="w-8 h-8 rounded-full bg-pink-50 text-pink-500 hover:bg-pink-100 flex items-center justify-center font-bold transition">‹</button>
                 <button onclick="changeMonth('wara', 1)" class="w-8 h-8 rounded-full bg-pink-50 text-pink-500 hover:bg-pink-100 flex items-center justify-center font-bold transition">›</button>
@@ -176,7 +190,15 @@
         <div id="chen-sub-calendar">
           <div class="bg-[#1c2541] rounded-3xl p-4 border border-slate-700/50 mb-3 shadow-sm">
             <div class="flex justify-between items-center mb-3">
-              <h3 id="chen-cal-month-year" class="text-sky-400 font-bold text-base">สิงหาคม 2569</h3>
+              <!-- ส่วน Dropdown เลือกลัดเดือนและปี ฝั่งเชน -->
+              <div class="flex items-center gap-1 bg-[#0b132b] hover:bg-slate-800 px-2.5 py-1 rounded-2xl transition border border-slate-700/70 cursor-pointer">
+                <select id="chen-select-month" onchange="onDropdownMonthYearChange('chen')" class="bg-transparent text-sky-400 font-bold text-sm focus:outline-none cursor-pointer pr-1">
+                </select>
+                <select id="chen-select-year" onchange="onDropdownMonthYearChange('chen')" class="bg-transparent text-sky-400 font-bold text-sm focus:outline-none cursor-pointer">
+                </select>
+                <span class="text-sky-400 text-xs pointer-events-none">▾</span>
+              </div>
+
               <div class="flex gap-1">
                 <button onclick="changeMonth('chen', -1)" class="w-8 h-8 rounded-full bg-[#0b132b] text-sky-400 hover:bg-slate-800 flex items-center justify-center font-bold transition">‹</button>
                 <button onclick="changeMonth('chen', 1)" class="w-8 h-8 rounded-full bg-[#0b132b] text-sky-400 hover:bg-slate-800 flex items-center justify-center font-bold transition">›</button>
@@ -299,7 +321,6 @@
       chenHomework: []
     };
 
-    // Realtime Sync จาก Firestore
     onSnapshot(doc(dbFirestore, "planners", "shared_data"), (snapshot) => {
       if (snapshot.exists()) {
         window.db = snapshot.data();
@@ -315,7 +336,6 @@
       }
     });
 
-    // บันทึกกลับขึ้น Firebase Firestore
     window.saveDB = async function() {
       try {
         await setDoc(doc(dbFirestore, "planners", "shared_data"), window.db);
@@ -336,6 +356,8 @@
     let selectedWaraColor = '#ffb3c1';
     let selectedChenColor = '#ff8a80';
 
+    const monthNamesTH = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+
     function formatDateKey(dateObj) {
       const y = dateObj.getFullYear();
       const m = String(dateObj.getMonth() + 1).padStart(2, '0');
@@ -343,7 +365,61 @@
       return `${y}-${m}-${d}`;
     }
 
-    const monthNamesTH = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+    // สร้างตัวเลือกใน Dropdown สำหรับเดือนและปี
+    function initDropdownOptions(user) {
+      const monthSelect = document.getElementById(`${user}-select-month`);
+      const yearSelect = document.getElementById(`${user}-select-year`);
+      if (!monthSelect || !yearSelect) return;
+
+      if (monthSelect.options.length === 0) {
+        monthNamesTH.forEach((m, idx) => {
+          const opt = document.createElement('option');
+          opt.value = idx;
+          opt.innerText = m;
+          monthSelect.appendChild(opt);
+        });
+      }
+
+      if (yearSelect.options.length === 0) {
+        const startYear = 2024;
+        for (let y = startYear; y <= startYear + 8; y++) {
+          const opt = document.createElement('option');
+          opt.value = y;
+          opt.innerText = (y + 543);
+          yearSelect.appendChild(opt);
+        }
+      }
+    }
+
+    function syncDropdownValues(user) {
+      initDropdownOptions(user);
+      const isWara = user === 'wara';
+      const dateObj = isWara ? currentWaraDate : currentChenDate;
+      const monthSelect = document.getElementById(`${user}-select-month`);
+      const yearSelect = document.getElementById(`${user}-select-year`);
+
+      if (monthSelect && yearSelect) {
+        monthSelect.value = dateObj.getMonth();
+        yearSelect.value = dateObj.getFullYear();
+      }
+    }
+
+    function onDropdownMonthYearChange(user) {
+      const isWara = user === 'wara';
+      const monthSelect = document.getElementById(`${user}-select-month`);
+      const yearSelect = document.getElementById(`${user}-select-year`);
+      
+      const newMonth = parseInt(monthSelect.value);
+      const newYear = parseInt(yearSelect.value);
+
+      if (isWara) {
+        currentWaraDate.setFullYear(newYear, newMonth, 1);
+      } else {
+        currentChenDate.setFullYear(newYear, newMonth, 1);
+      }
+
+      renderCalendar(user);
+    }
 
     function switchView(viewName) {
       document.getElementById('view-home').classList.add('hidden-view');
@@ -358,7 +434,7 @@
     function switchWaraTab(tabIndex) {
       document.getElementById('wara-sub-calendar').classList.add('hidden-view');
       document.getElementById('wara-sub-notes').classList.add('hidden-view');
-      document.getElementById('wara-sub-passwords').classList.add('hidden-view');
+      document.getElementById('wara-sub-[#ff477e] passwords' || 'wara-sub-passwords').classList.add('hidden-view');
       
       for(let i=1; i<=3; i++) {
         document.getElementById(`btn-wara-${i}`).className = "flex flex-col items-center gap-1 text-slate-400";
@@ -414,7 +490,7 @@
       const year = dateObj.getFullYear();
       const month = dateObj.getMonth();
 
-      document.getElementById(`${user}-cal-month-year`).innerText = `${monthNamesTH[month]} ${year + 543}`;
+      syncDropdownValues(user);
 
       const firstDayOfMonth = new Date(year, month, 1).getDay();
       const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -725,7 +801,6 @@
       `).join('');
     }
 
-    // บีบอัดขนาดรูปภาพก่อนส่งขึ้น Firebase เพื่อป้องกันเกินขนาดจำกัด 1MB
     function uploadScheduleImage(event) {
       const file = event.target.files[0];
       if (!file) return;
