@@ -1,15 +1,835 @@
-/* ปรับตัวปุ่มหรือการ์ด */
-.your-button-or-card-class {
-  /* กำหนดให้การคืนตัวกลับมานุ่มนวล */
-  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
-  user-select: none; /* ป้องกันการคลุมดำข้อความเวลาแนบกดรวดเร็ว */
-}
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Couple Planner 🐱🕷️</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Prompt', sans-serif; }
+    .hidden-view { display: none !important; }
+    
+    /* เอฟเฟกต์การ์ดนูนและเด้งดึ๋ง */
+    .bounce-card {
+      transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+    }
+    .bounce-card:active {
+      transform: scale(0.92);
+    }
+    
+    .shadow-wara-3d {
+      box-shadow: 0 15px 35px -5px rgba(255, 105, 180, 0.45), 0 5px 15px rgba(255, 182, 193, 0.5);
+    }
+    .shadow-chen-3d {
+      box-shadow: 0 15px 35px -5px rgba(14, 165, 233, 0.45), 0 5px 15px rgba(216, 27, 96, 0.4);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-[#ff758c] via-[#ff7eb3] to-[#4facfe] min-h-screen flex justify-center items-center p-2 sm:p-4">
 
-/* เอฟเฟกต์ตอนกด/แตะค้าง (สู้มือแบบสปริงนุ่มๆ) */
-.your-button-or-card-class:active {
-  /* ย่อลงเล็กน้อยให้รู้สึกยุบตามแรงกด */
-  transform: scale(0.95);
-  /* เร่งความเร็วตอนกดลงไปให้ตอบสนองทันที */
-  transition: transform 0.05s ease-in-out;
-}
+  <div class="w-full max-w-md min-h-[680px] flex flex-col justify-between">
+
+    <!-- ================= 1. หน้าหลัก (HOME) ================= -->
+    <div id="view-home" class="space-y-6 p-2 my-auto">
+      
+      <!-- Card วรา -->
+      <div onclick="switchView('wara')" class="bounce-card cursor-pointer bg-gradient-to-br from-[#ff5e97] via-[#ff758f] to-[#ff9ebb] rounded-[2.5rem] p-6 text-white shadow-wara-3d border-2 border-white/40 relative overflow-hidden h-48 flex flex-col justify-between">
+        <div class="absolute -right-3 -bottom-5 opacity-30 text-9xl pointer-events-none select-none">🎀</div>
+        <div>
+          <span class="inline-flex items-center gap-1 bg-white/90 text-[#ff4081] text-xs font-bold px-3 py-1 rounded-full mb-2 shadow-sm backdrop-blur-sm">
+            🎀 Hello Kitty World
+          </span>
+          <h1 class="text-3xl font-extrabold tracking-wide drop-shadow-sm">วรา 🌸</h1>
+          <p class="text-xs text-white/95 mt-1 font-light">ปฏิทินกิจกรรม • โน้ต & ลิสต์ • บันทึกรหัสผ่าน</p>
+        </div>
+        <div class="self-end bg-white text-[#ff4081] rounded-full p-3 shadow-lg flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 stroke-[3]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </div>
+      </div>
+
+      <!-- Card เชน -->
+      <div onclick="switchView('chen')" class="bounce-card cursor-pointer bg-gradient-to-br from-[#d81b60] via-[#7b1fa2] to-[#0284c7] rounded-[2.5rem] p-6 text-white shadow-chen-3d border-2 border-white/30 relative overflow-hidden h-48 flex flex-col justify-between">
+        <div class="absolute -right-3 -bottom-5 opacity-30 text-9xl pointer-events-none select-none">🕷️</div>
+        <div>
+          <span class="inline-flex items-center gap-1 bg-white/90 text-[#0284c7] text-xs font-bold px-3 py-1 rounded-full mb-2 shadow-sm backdrop-blur-sm">
+            🕷️ Spidey Zone
+          </span>
+          <h1 class="text-3xl font-extrabold tracking-wide drop-shadow-sm">เชน 🕸️</h1>
+          <p class="text-xs text-white/95 mt-1 font-light">ปฏิทิน • ตารางเรียนแนบรูป • การบ้าน • รหัสผ่าน</p>
+        </div>
+        <div class="self-end bg-white text-[#0284c7] rounded-full p-3 shadow-lg flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 stroke-[3]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- ================= 2. หน้า วรา (WARA ZONE) ================= -->
+    <div id="view-wara" class="hidden-view bg-[#fff0f5] text-slate-800 min-h-[680px] rounded-[2.5rem] p-4 shadow-2xl flex flex-col justify-between border-4 border-white">
+      <div>
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-[#ff758f] to-[#ff85a2] rounded-2xl p-3.5 text-white flex justify-between items-center mb-3 shadow-md">
+          <h2 id="wara-header-title" class="text-lg font-bold flex items-center gap-2">🎀 Kitty Calendar</h2>
+          <button onclick="switchView('home')" class="bg-white/20 hover:bg-white/30 text-white text-xs px-3 py-1.5 rounded-xl transition backdrop-blur-sm font-medium">🏠 หน้าแรก</button>
+        </div>
+
+        <!-- แท็บ 1: ปฏิทิน -->
+        <div id="wara-sub-calendar">
+          <div class="bg-white rounded-3xl p-4 shadow-sm mb-3">
+            <div class="flex justify-between items-center mb-3">
+              <h3 id="wara-cal-month-year" class="text-[#ff477e] font-bold text-base">สิงหาคม 2026</h3>
+              <div class="flex gap-1">
+                <button onclick="changeMonth('wara', -1)" class="w-8 h-8 rounded-full bg-pink-50 text-pink-500 hover:bg-pink-100 flex items-center justify-center font-bold transition">‹</button>
+                <button onclick="changeMonth('wara', 1)" class="w-8 h-8 rounded-full bg-pink-50 text-pink-500 hover:bg-pink-100 flex items-center justify-center font-bold transition">›</button>
+              </div>
+            </div>
+            <div class="grid grid-cols-7 text-center text-xs font-semibold text-slate-400 mb-2">
+              <span class="text-red-400">อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span class="text-pink-400">ส</span>
+            </div>
+            <!-- ช่องปฏิทินเต็มเดือน -->
+            <div id="wara-calendar-days" class="grid grid-cols-7 gap-1 text-xs text-center"></div>
+          </div>
+
+          <!-- จัดการกิจกรรมในวันที่เลือก -->
+          <div class="bg-white rounded-3xl p-4 shadow-sm space-y-3">
+            <h4 id="wara-selected-date-text" class="text-[#ff477e] font-bold text-center text-xs">จัดการกิจกรรม (คลิกเลือกวันที่ในปฏิทิน)</h4>
+            
+            <!-- จานสีพาสเทล -->
+            <div class="flex justify-center gap-1.5 py-1">
+              <button onclick="selectColor('wara', '#ffb3c1')" class="color-btn-wara w-6 h-6 rounded-full bg-[#ffb3c1] ring-2 ring-pink-400" data-color="#ffb3c1"></button>
+              <button onclick="selectColor('wara', '#ffc6ff')" class="color-btn-wara w-6 h-6 rounded-full bg-[#ffc6ff]" data-color="#ffc6ff"></button>
+              <button onclick="selectColor('wara', '#bdd5ea')" class="color-btn-wara w-6 h-6 rounded-full bg-[#bdd5ea]" data-color="#bdd5ea"></button>
+              <button onclick="selectColor('wara', '#b5e2fa')" class="color-btn-wara w-6 h-6 rounded-full bg-[#b5e2fa]" data-color="#b5e2fa"></button>
+              <button onclick="selectColor('wara', '#c7f9cc')" class="color-btn-wara w-6 h-6 rounded-full bg-[#c7f9cc]" data-color="#c7f9cc"></button>
+              <button onclick="selectColor('wara', '#fffffc')" class="color-btn-wara w-6 h-6 rounded-full bg-[#fffffc] border border-slate-300" data-color="#fffffc"></button>
+              <button onclick="selectColor('wara', '#ffe5ec')" class="color-btn-wara w-6 h-6 rounded-full bg-[#ffe5ec]" data-color="#ffe5ec"></button>
+              <button onclick="selectColor('wara', '#fde2e4')" class="color-btn-wara w-6 h-6 rounded-full bg-[#fde2e4]" data-color="#fde2e4"></button>
+            </div>
+
+            <div class="flex gap-2">
+              <input type="text" id="wara-event-input" placeholder="+ บันทึกกิจกรรม..." class="flex-1 bg-pink-50/50 border border-pink-100 rounded-2xl px-3.5 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-pink-300">
+              <button onclick="addCalendarEvent('wara')" class="bg-[#ff758f] text-white font-medium px-4 py-2 rounded-2xl text-xs shadow-sm hover:bg-[#ff5e97] transition">เพิ่ม</button>
+            </div>
+
+            <div id="wara-events-list" class="space-y-2 text-xs pt-1 max-h-36 overflow-y-auto"></div>
+          </div>
+        </div>
+
+        <!-- แท็บ 2: โน้ต -->
+        <div id="wara-sub-notes" class="hidden-view space-y-3">
+          <div class="bg-white rounded-3xl p-4 shadow-sm space-y-3">
+            <div class="flex justify-between items-center">
+              <h4 class="text-[#ff477e] font-bold text-sm">📝 Kitty Notes & Lists</h4>
+              <button onclick="showAddNoteModal('wara')" class="bg-[#ff758f] text-white text-xs font-semibold px-3 py-1.5 rounded-xl shadow-sm hover:bg-[#ff5e97] transition">+ เพิ่มโน้ตใหม่</button>
+            </div>
+
+            <!-- ฟอร์มเพิ่มโน้ต -->
+            <div id="wara-note-form" class="hidden-view bg-pink-50/60 p-3 rounded-2xl space-y-2.5 border border-pink-100 text-xs">
+              <input type="text" id="wara-note-title" placeholder="หัวข้อโน้ต..." class="w-full bg-white border border-pink-200 rounded-xl px-3 py-1.5 font-semibold focus:outline-none">
+              
+              <div class="flex gap-3 text-slate-600">
+                <label class="flex items-center gap-1 cursor-pointer">
+                  <input type="radio" name="wara-note-type" value="text" checked onchange="toggleNoteInputType('wara')"> โน้ตปกติ
+                </label>
+                <label class="flex items-center gap-1 cursor-pointer">
+                  <input type="radio" name="wara-note-type" value="list" onchange="toggleNoteInputType('wara')"> เช็กลิสต์ (ติ๊กถูก)
+                </label>
+              </div>
+
+              <textarea id="wara-note-content-text" rows="3" placeholder="เนื้อหาโน้ต..." class="w-full bg-white border border-pink-200 rounded-xl p-2.5 text-xs focus:outline-none"></textarea>
+              <textarea id="wara-note-content-list" rows="3" placeholder="ใส่รายการ (แยกด้วยการขึ้นบรรทัดใหม่)" class="hidden-view w-full bg-white border border-pink-200 rounded-xl p-2.5 text-xs focus:outline-none"></textarea>
+
+              <div class="flex justify-end gap-2">
+                <button onclick="hideAddNoteModal('wara')" class="bg-slate-200 text-slate-600 px-3 py-1 rounded-xl">ยกเลิก</button>
+                <button onclick="saveNote('wara')" class="bg-[#ff758f] text-white px-4 py-1 rounded-xl font-medium">บันทึก</button>
+              </div>
+            </div>
+
+            <!-- รายการหัวข้อโน้ต -->
+            <div id="wara-notes-list" class="space-y-2 max-h-[380px] overflow-y-auto pt-1"></div>
+          </div>
+        </div>
+
+        <!-- แท็บ 3: รหัสผ่าน -->
+        <div id="wara-sub-passwords" class="hidden-view space-y-3">
+          <div class="bg-white rounded-3xl p-4 shadow-sm space-y-3">
+            <h4 class="text-[#ff477e] font-bold text-sm">🔑 Kitty Secrets (บันทึกรหัสผ่าน)</h4>
+            
+            <div class="bg-pink-50/50 p-3 rounded-2xl space-y-2 border border-pink-100 text-xs">
+              <input type="text" id="wara-pass-title" placeholder="ชื่อหัวข้อ (เช่น IG, Shopee, Gmail)..." class="w-full bg-white border border-pink-200 rounded-xl px-3 py-2 focus:outline-none">
+              <input type="text" id="wara-pass-value" placeholder="รหัสผ่าน..." class="w-full bg-white border border-pink-200 rounded-xl px-3 py-2 focus:outline-none font-mono">
+              <button onclick="savePassword('wara')" class="w-full bg-[#ff758f] text-white font-bold py-2 rounded-xl text-xs shadow-sm hover:bg-[#ff5e97]">บันทึกรหัสผ่าน</button>
+            </div>
+
+            <div id="wara-passwords-list" class="space-y-2 max-h-[300px] overflow-y-auto pt-1"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Nav (วรา) -->
+      <div class="bg-white rounded-2xl p-2 flex justify-around border border-pink-100 shadow-sm text-xs mt-3">
+        <button id="btn-wara-1" onclick="switchWaraTab(1)" class="flex flex-col items-center gap-1 text-[#ff477e] font-bold">📅 <span>ปฏิทิน</span></button>
+        <button id="btn-wara-2" onclick="switchWaraTab(2)" class="flex flex-col items-center gap-1 text-slate-400">📝 <span>โน้ต</span></button>
+        <button id="btn-wara-3" onclick="switchWaraTab(3)" class="flex flex-col items-center gap-1 text-slate-400">🔑 <span>รหัสผ่าน</span></button>
+      </div>
+    </div>
+
+
+    <!-- ================= 3. หน้า เชน (SPIDEY ZONE) ================= -->
+    <div id="view-chen" class="hidden-view bg-[#0b132b] text-slate-100 min-h-[680px] rounded-[2.5rem] p-4 shadow-2xl flex flex-col justify-between border-4 border-slate-800">
+      <div>
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-[#d81b60] via-[#7b1fa2] to-[#0284c7] rounded-2xl p-3.5 text-white flex justify-between items-center mb-3 shadow-md">
+          <h2 id="chen-header-title" class="text-lg font-bold flex items-center gap-2">🕷️ Spidey Calendar</h2>
+          <button onclick="switchView('home')" class="bg-white/20 hover:bg-white/30 text-white text-xs px-3 py-1.5 rounded-xl transition backdrop-blur-sm font-medium">🏠 หน้าแรก</button>
+        </div>
+
+        <!-- แท็บ 1: ปฏิทิน -->
+        <div id="chen-sub-calendar">
+          <div class="bg-[#1c2541] rounded-3xl p-4 border border-slate-700/50 mb-3 shadow-sm">
+            <div class="flex justify-between items-center mb-3">
+              <h3 id="chen-cal-month-year" class="text-sky-400 font-bold text-base">สิงหาคม 2026</h3>
+              <div class="flex gap-1">
+                <button onclick="changeMonth('chen', -1)" class="w-8 h-8 rounded-full bg-[#0b132b] text-sky-400 hover:bg-slate-800 flex items-center justify-center font-bold transition">‹</button>
+                <button onclick="changeMonth('chen', 1)" class="w-8 h-8 rounded-full bg-[#0b132b] text-sky-400 hover:bg-slate-800 flex items-center justify-center font-bold transition">›</button>
+              </div>
+            </div>
+            <div class="grid grid-cols-7 text-center text-xs font-semibold text-slate-400 mb-2">
+              <span class="text-red-400">อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span class="text-sky-400">ส</span>
+            </div>
+            <!-- ช่องปฏิทินเต็มเดือน -->
+            <div id="chen-calendar-days" class="grid grid-cols-7 gap-1 text-xs text-center"></div>
+          </div>
+
+          <!-- จัดการกิจกรรม -->
+          <div class="bg-[#1c2541] rounded-3xl p-4 border border-slate-700/50 space-y-3">
+            <h4 id="chen-selected-date-text" class="text-sky-400 font-bold text-center text-xs">จัดการกิจกรรม (คลิกเลือกวันที่ในปฏิทิน)</h4>
+            
+            <!-- จานสีพาสเทล -->
+            <div class="flex justify-center gap-1.5 py-1">
+              <button onclick="selectColor('chen', '#ff8a80')" class="color-btn-chen w-6 h-6 rounded-full bg-[#ff8a80] ring-2 ring-red-400" data-color="#ff8a80"></button>
+              <button onclick="selectColor('chen', '#ff80ab')" class="color-btn-chen w-6 h-6 rounded-full bg-[#ff80ab]" data-color="#ff80ab"></button>
+              <button onclick="selectColor('chen', '#ea80fc')" class="color-btn-chen w-6 h-6 rounded-full bg-[#ea80fc]" data-color="#ea80fc"></button>
+              <button onclick="selectColor('chen', '#b388ff')" class="color-btn-chen w-6 h-6 rounded-full bg-[#b388ff]" data-color="#b388ff"></button>
+              <button onclick="selectColor('chen', '#8c9ffff')" class="color-btn-chen w-6 h-6 rounded-full bg-[#8c9eff]" data-color="#8c9eff"></button>
+              <button onclick="selectColor('chen', '#80d8ff')" class="color-btn-chen w-6 h-6 rounded-full bg-[#80d8ff]" data-color="#80d8ff"></button>
+              <button onclick="selectColor('chen', '#a7ffeb')" class="color-btn-chen w-6 h-6 rounded-full bg-[#a7ffeb]" data-color="#a7ffeb"></button>
+              <button onclick="selectColor('chen', '#ccff90')" class="color-btn-chen w-6 h-6 rounded-full bg-[#ccff90]" data-color="#ccff90"></button>
+            </div>
+
+            <div class="flex gap-2">
+              <input type="text" id="chen-event-input" placeholder="+ บันทึกกิจกรรม..." class="flex-1 bg-[#0b132b] border border-slate-700 rounded-2xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-sky-500">
+              <button onclick="addCalendarEvent('chen')" class="bg-gradient-to-r from-[#d81b60] to-[#0284c7] text-white font-medium px-4 py-2 rounded-2xl text-xs shadow-sm hover:opacity-90">เพิ่ม</button>
+            </div>
+
+            <div id="chen-events-list" class="space-y-2 text-xs pt-1 max-h-36 overflow-y-auto"></div>
+          </div>
+        </div>
+
+        <!-- แท็บ 2: ตารางเรียน (แนบไฟล์ภาพ) -->
+        <div id="chen-sub-schedule" class="hidden-view space-y-3">
+          <div class="bg-[#1c2541] rounded-3xl p-4 border border-slate-700/50 space-y-3">
+            <h4 class="text-sky-400 font-bold text-sm flex items-center justify-between">
+              <span>🎓 ตารางเรียน (แนบรูปภาพ)</span>
+              <label class="cursor-pointer bg-sky-600 hover:bg-sky-500 text-white text-xs px-3 py-1.5 rounded-xl transition font-normal">
+                📷 แนบรูปตาราง
+                <input type="file" accept="image/*" class="hidden" onchange="uploadScheduleImage(event)">
+              </label>
+            </h4>
+
+            <div id="schedule-image-container" class="min-h-[250px] bg-[#0b132b] rounded-2xl border border-dashed border-slate-700 flex flex-col items-center justify-center p-2 relative overflow-hidden">
+              <p class="text-xs text-slate-500">ยังไม่มีรูปตารางเรียน กดแนบรูปด้านบนได้เลย</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- แท็บ 3: การบ้าน & กำหนดส่ง -->
+        <div id="chen-sub-homework" class="hidden-view space-y-3">
+          <div class="bg-[#1c2541] rounded-3xl p-4 border border-slate-700/50 space-y-3">
+            <h4 class="text-sky-400 font-bold text-sm">📖 บันทึกการบ้าน & กำหนดส่ง</h4>
+            
+            <div class="bg-[#0b132b] p-3 rounded-2xl space-y-2 border border-slate-700 text-xs">
+              <input type="text" id="hw-title" placeholder="ชื่อการบ้าน / วิชา..." class="w-full bg-[#1c2541] border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none">
+              <div class="flex items-center gap-2">
+                <span class="text-slate-400 text-[11px]">กำหนดส่ง:</span>
+                <input type="date" id="hw-date" class="flex-1 bg-[#1c2541] border border-slate-700 rounded-xl px-3 py-1.5 text-white focus:outline-none">
+              </div>
+              <button onclick="addHomework()" class="w-full bg-gradient-to-r from-[#d81b60] to-[#0284c7] text-white font-bold py-2 rounded-xl text-xs shadow-sm">เพิ่มการบ้าน</button>
+            </div>
+
+            <div id="homework-list" class="space-y-2 max-h-[300px] overflow-y-auto pt-1"></div>
+          </div>
+        </div>
+
+        <!-- แท็บ 4: รหัสผ่าน (เพิ่มใหม่ฝั่งเชน) -->
+        <div id="chen-sub-passwords" class="hidden-view space-y-3">
+          <div class="bg-[#1c2541] rounded-3xl p-4 border border-slate-700/50 space-y-3">
+            <h4 class="text-sky-400 font-bold text-sm">🔑 Spidey Secrets (บันทึกรหัสผ่าน)</h4>
+            
+            <div class="bg-[#0b132b] p-3 rounded-2xl space-y-2 border border-slate-700 text-xs">
+              <input type="text" id="chen-pass-title" placeholder="ชื่อหัวข้อ (เช่น Steam, Facebook, Mail)..." class="w-full bg-[#1c2541] border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none">
+              <input type="text" id="chen-pass-value" placeholder="รหัสผ่าน..." class="w-full bg-[#1c2541] border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none font-mono">
+              <button onclick="savePassword('chen')" class="w-full bg-gradient-to-r from-[#d81b60] to-[#0284c7] text-white font-bold py-2 rounded-xl text-xs shadow-sm">บันทึกรหัสผ่าน</button>
+            </div>
+
+            <div id="chen-passwords-list" class="space-y-2 max-h-[300px] overflow-y-auto pt-1"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Nav (เชน) -->
+      <div class="bg-[#1c2541] rounded-2xl p-2 flex justify-around border border-slate-700/60 shadow-sm text-xs mt-3">
+        <button id="btn-chen-1" onclick="switchChenTab(1)" class="flex flex-col items-center gap-1 text-sky-400 font-bold">📅 <span>ปฏิทิน</span></button>
+        <button id="btn-chen-2" onclick="switchChenTab(2)" class="flex flex-col items-center gap-1 text-slate-400">🎓 <span>ตารางเรียน</span></button>
+        <button id="btn-chen-3" onclick="switchChenTab(3)" class="flex flex-col items-center gap-1 text-slate-400">📖 <span>การบ้าน</span></button>
+        <button id="btn-chen-4" onclick="switchChenTab(4)" class="flex flex-col items-center gap-1 text-slate-400">🔑 <span>รหัสผ่าน</span></button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SCRIPT KERNEL -->
+  <script>
+    // --- STATE MANAGEMENT ---
+    let currentWaraDate = new Date();
+    let currentChenDate = new Date();
+    let selectedWaraDateStr = formatDateKey(new Date());
+    let selectedChenDateStr = formatDateKey(new Date());
+    let selectedWaraColor = '#ffb3c1';
+    let selectedChenColor = '#ff8a80';
+
+    // LocalStorage Database
+    let db = JSON.parse(localStorage.getItem('couple_planner_db')) || {
+      waraEvents: {},
+      chenEvents: {},
+      waraNotes: [],
+      waraPasswords: [],
+      chenPasswords: [],
+      chenScheduleImg: '',
+      chenHomework: []
+    };
+
+    function saveDB() {
+      localStorage.setItem('couple_planner_db', JSON.stringify(db));
+    }
+
+    function formatDateKey(dateObj) {
+      const y = dateObj.getFullYear();
+      const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const d = String(dateObj.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    const monthNamesTH = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+
+    // --- NAVIGATION ---
+    function switchView(viewName) {
+      document.getElementById('view-home').classList.add('hidden-view');
+      document.getElementById('view-wara').classList.add('hidden-view');
+      document.getElementById('view-chen').classList.add('hidden-view');
+      document.getElementById('view-' + viewName).classList.remove('hidden-view');
+
+      if (viewName === 'wara') { renderCalendar('wara'); renderNotes('wara'); renderPasswords('wara'); }
+      if (viewName === 'chen') { renderCalendar('chen'); renderScheduleImage(); renderHomework(); renderPasswords('chen'); }
+    }
+
+    function switchWaraTab(tabIndex) {
+      document.getElementById('wara-sub-calendar').classList.add('hidden-view');
+      document.getElementById('wara-sub-notes').classList.add('hidden-view');
+      document.getElementById('wara-sub-passwords').classList.add('hidden-view');
+      
+      for(let i=1; i<=3; i++) {
+        document.getElementById(`btn-wara-${i}`).className = "flex flex-col items-center gap-1 text-slate-400";
+      }
+
+      if (tabIndex === 1) {
+        document.getElementById('wara-sub-calendar').classList.remove('hidden-view');
+        document.getElementById('btn-wara-1').className = "flex flex-col items-center gap-1 text-[#ff477e] font-bold";
+        document.getElementById('wara-header-title').innerText = "🎀 Kitty Calendar";
+      } else if (tabIndex === 2) {
+        document.getElementById('wara-sub-notes').classList.remove('hidden-view');
+        document.getElementById('btn-wara-2').className = "flex flex-col items-center gap-1 text-[#ff477e] font-bold";
+        document.getElementById('wara-header-title').innerText = "📝 Kitty Notes";
+      } else if (tabIndex === 3) {
+        document.getElementById('wara-sub-passwords').classList.remove('hidden-view');
+        document.getElementById('btn-wara-3').className = "flex flex-col items-center gap-1 text-[#ff477e] font-bold";
+        document.getElementById('wara-header-title').innerText = "🔑 Kitty Passwords";
+      }
+    }
+
+    function switchChenTab(tabIndex) {
+      document.getElementById('chen-sub-calendar').classList.add('hidden-view');
+      document.getElementById('chen-sub-[#sub-schedule]').classList?.add('hidden-view');
+      document.getElementById('chen-sub-schedule').classList.add('hidden-view');
+      document.getElementById('chen-sub-homework').classList.add('hidden-view');
+      document.getElementById('chen-sub-passwords').classList.add('hidden-view');
+
+      for(let i=1; i<=4; i++) {
+        document.getElementById(`btn-chen-${i}`).className = "flex flex-col items-center gap-1 text-slate-400";
+      }
+
+      if (tabIndex === 1) {
+        document.getElementById('chen-sub-calendar').classList.remove('hidden-view');
+        document.getElementById('btn-chen-1').className = "flex flex-col items-center gap-1 text-sky-400 font-bold";
+        document.getElementById('chen-header-title').innerText = "🕷️ Spidey Calendar";
+      } else if (tabIndex === 2) {
+        document.getElementById('chen-sub-schedule').classList.remove('hidden-view');
+        document.getElementById('btn-chen-2').className = "flex flex-col items-center gap-1 text-sky-400 font-bold";
+        document.getElementById('chen-header-title').innerText = "🎓 Spidey Schedule";
+      } else if (tabIndex === 3) {
+        document.getElementById('chen-sub-homework').classList.remove('hidden-view');
+        document.getElementById('btn-chen-3').className = "flex flex-col items-center gap-1 text-sky-400 font-bold";
+        document.getElementById('chen-header-title').innerText = "📖 Spidey Homework";
+      } else if (tabIndex === 4) {
+        document.getElementById('chen-sub-passwords').classList.remove('hidden-view');
+        document.getElementById('btn-chen-4').className = "flex flex-col items-center gap-1 text-sky-400 font-bold";
+        document.getElementById('chen-header-title').innerText = "🔑 Spidey Passwords";
+      }
+    }
+
+    // --- CALENDAR SYSTEM ( FULL MONTH & AUTOMATIC YEARS ) ---
+    function renderCalendar(user) {
+      const isWara = user === 'wara';
+      const dateObj = isWara ? currentWaraDate : currentChenDate;
+      const year = dateObj.getFullYear();
+      const month = dateObj.getMonth();
+
+      // Update Month Year Text
+      document.getElementById(`${user}-cal-month-year`).innerText = `${monthNamesTH[month]} ${year + 543}`;
+
+      const firstDayOfMonth = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+      const container = document.getElementById(`${user}-calendar-days`);
+      container.innerHTML = '';
+
+      // 1. วันของเดือนก่อนหน้า (เพื่อความสมบูรณ์ของสัปดาห์)
+      for (let i = firstDayOfMonth - 1; i >= 0; i--) {
+        const dayNum = daysInPrevMonth - i;
+        const div = document.createElement('div');
+        div.className = "h-9 p-1 rounded-lg bg-transparent text-slate-300 opacity-40 flex flex-col justify-between";
+        div.innerText = dayNum;
+        container.appendChild(div);
+      }
+
+      // 2. วันในเดือนปัจจุบัน
+      const eventsObj = isWara ? db.waraEvents : db.chenEvents;
+      const selectedKey = isWara ? selectedWaraDateStr : selectedChenDateStr;
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const thisDateObj = new Date(year, month, d);
+        const dateKey = formatDateKey(thisDateObj);
+        const isSelected = dateKey === selectedKey;
+        const dayEvents = eventsObj[dateKey] || [];
+
+        const div = document.createElement('div');
+        div.onclick = () => selectCalendarDate(user, dateKey);
+
+        let activeClasses = isWara 
+          ? (isSelected ? 'bg-pink-200 border-2 border-pink-400 text-slate-800 font-bold shadow-sm' : 'bg-pink-50/70 hover:bg-pink-100 text-slate-700')
+          : (isSelected ? 'bg-sky-900 border-2 border-sky-400 text-white font-bold shadow-sm' : 'bg-[#0b132b]/80 hover:bg-slate-800 text-slate-300');
+
+        div.className = `h-9 p-0.5 rounded-lg text-xs cursor-pointer transition flex flex-col justify-between items-center ${activeClasses}`;
+        
+        let dotHtml = '';
+        if (dayEvents.length > 0) {
+          dotHtml = `<div class="flex gap-0.5 max-w-full overflow-hidden mb-0.5">` + 
+            dayEvents.slice(0, 3).map(ev => `<span class="w-1.5 h-1.5 rounded-full" style="background-color: ${ev.color}"></span>`).join('') +
+            `</div>`;
+        }
+
+        div.innerHTML = `<span>${d}</span>${dotHtml}`;
+        container.appendChild(div);
+      }
+
+      // 3. วันของเดือนถัดไป ให้ครบ 35 หรือ 42 ช่องเต็มตาราง
+      const totalRendered = firstDayOfMonth + daysInMonth;
+      const remainingSlots = (totalRendered > 35 ? 42 : 35) - totalRendered;
+      for (let i = 1; i <= remainingSlots; i++) {
+        const div = document.createElement('div');
+        div.className = "h-9 p-1 rounded-lg bg-transparent text-slate-300 opacity-40 flex flex-col justify-between";
+        div.innerText = i;
+        container.appendChild(div);
+      }
+
+      renderSelectedEvents(user);
+    }
+
+    function changeMonth(user, delta) {
+      const isWara = user === 'wara';
+      const dateObj = isWara ? currentWaraDate : currentChenDate;
+      const now = new Date();
+      
+      // ปรับย้อนหลังได้ 2 ปี และล่วงหน้า 5 ปี + ปรับอัตโนมัติตามปีปัจจุบัน
+      const minYear = now.getFullYear() - 2;
+      const maxYear = now.getFullYear() + 5;
+
+      dateObj.setMonth(dateObj.getMonth() + delta);
+      
+      if (dateObj.getFullYear() < minYear) dateObj.setFullYear(minYear, 0, 1);
+      if (dateObj.getFullYear() > maxYear) dateObj.setFullYear(maxYear, 11, 31);
+
+      renderCalendar(user);
+    }
+
+    function selectCalendarDate(user, dateKey) {
+      if (user === 'wara') selectedWaraDateStr = dateKey;
+      else selectedChenDateStr = dateKey;
+      renderCalendar(user);
+    }
+
+    function selectColor(user, colorHex) {
+      if (user === 'wara') {
+        selectedWaraColor = colorHex;
+        document.querySelectorAll('.color-btn-wara').forEach(btn => {
+          btn.classList.toggle('ring-2', btn.dataset.color === colorHex);
+          btn.classList.toggle('ring-pink-400', btn.dataset.color === colorHex);
+        });
+      } else {
+        selectedChenColor = colorHex;
+        document.querySelectorAll('.color-btn-chen').forEach(btn => {
+          btn.classList.toggle('ring-2', btn.dataset.color === colorHex);
+          btn.classList.toggle('ring-red-400', btn.dataset.color === colorHex);
+        });
+      }
+    }
+
+    function addCalendarEvent(user) {
+      const input = document.getElementById(`${user}-event-input`);
+      const text = input.value.trim();
+      if (!text) return;
+
+      const isWara = user === 'wara';
+      const dateKey = isWara ? selectedWaraDateStr : selectedChenDateStr;
+      const color = isWara ? selectedWaraColor : selectedChenColor;
+      const eventsObj = isWara ? db.waraEvents : db.chenEvents;
+
+      if (!eventsObj[dateKey]) eventsObj[dateKey] = [];
+      eventsObj[dateKey].push({ id: Date.now(), text, color });
+
+      saveDB();
+      input.value = '';
+      renderCalendar(user);
+    }
+
+    function deleteCalendarEvent(user, dateKey, id) {
+      const eventsObj = user === 'wara' ? db.waraEvents : db.chenEvents;
+      if (eventsObj[dateKey]) {
+        eventsObj[dateKey] = eventsObj[dateKey].filter(ev => ev.id !== id);
+        if (eventsObj[dateKey].length === 0) delete eventsObj[dateKey];
+        saveDB();
+        renderCalendar(user);
+      }
+    }
+
+    function renderSelectedEvents(user) {
+      const isWara = user === 'wara';
+      const dateKey = isWara ? selectedWaraDateStr : selectedChenDateStr;
+      const eventsObj = isWara ? db.waraEvents : db.chenEvents;
+      const listContainer = document.getElementById(`${user}-events-list`);
+      
+      const dParts = dateKey.split('-');
+      const formattedDate = `${parseInt(dParts[2])} ${monthNamesTH[parseInt(dParts[1])-1]} ${parseInt(dParts[0])+543}`;
+      document.getElementById(`${user}-selected-date-text`).innerText = `จัดการกิจกรรม ( ${formattedDate} )`;
+
+      const list = eventsObj[dateKey] || [];
+      if (list.length === 0) {
+        listContainer.innerHTML = `<p class="text-slate-400 text-center text-[11px] py-2">ไม่มีกิจกรรมสำหรับวันนี้</p>`;
+        return;
+      }
+
+      listContainer.innerHTML = list.map(ev => `
+        <div class="p-2.5 rounded-xl flex justify-between items-center text-xs shadow-sm border border-slate-100" style="background-color: ${ev.color}40; border-left: 4px solid ${ev.color}">
+          <span class="text-slate-800 font-medium">${ev.text}</span>
+          <button onclick="deleteCalendarEvent('${user}', '${dateKey}', ${ev.id})" class="text-slate-400 hover:text-red-500 font-bold ml-2">🗑️</button>
+        </div>
+      `).join('');
+    }
+
+
+    // --- WARA NOTES SYSTEM (COLLAPSIBLE & LISTS) ---
+    function showAddNoteModal(user) {
+      document.getElementById(`${user}-note-form`).classList.remove('hidden-view');
+    }
+    function hideAddNoteModal(user) {
+      document.getElementById(`${user}-note-form`).classList.add('hidden-view');
+    }
+
+    function toggleNoteInputType(user) {
+      const type = document.querySelector(`input[name="${user}-note-type"]:checked`).value;
+      if (type === 'text') {
+        document.getElementById(`${user}-note-content-text`).classList.remove('hidden-view');
+        document.getElementById(`${user}-note-content-list`).classList.add('hidden-view');
+      } else {
+        document.getElementById(`${user}-note-content-text`).classList.add('hidden-view');
+        document.getElementById(`${user}-note-content-list`).classList.remove('hidden-view');
+      }
+    }
+
+    function saveNote(user) {
+      const title = document.getElementById(`${user}-note-title`).value.trim();
+      const type = document.querySelector(`input[name="${user}-note-type"]:checked`).value;
+      if (!title) return alert('กรุณาใส่หัวข้อโน้ต');
+
+      let content;
+      if (type === 'text') {
+        content = document.getElementById(`${user}-note-content-text`).value.trim();
+      } else {
+        const rawList = document.getElementById(`${user}-note-content-list`).value.split('\n').filter(i => i.trim() !== '');
+        content = rawList.map(t => ({ text: t, done: false }));
+      }
+
+      db.waraNotes.push({ id: Date.now(), title, type, content });
+      saveDB();
+
+      document.getElementById(`${user}-note-title`).value = '';
+      document.getElementById(`${user}-note-content-text`).value = '';
+      document.getElementById(`${user}-note-content-list`).value = '';
+      hideAddNoteModal(user);
+      renderNotes(user);
+    }
+
+    function toggleNoteExpand(id) {
+      const el = document.getElementById(`note-body-${id}`);
+      el.classList.toggle('hidden-view');
+    }
+
+    function toggleCheckItem(noteId, itemIdx) {
+      const note = db.waraNotes.find(n => n.id === noteId);
+      if (note && note.type === 'list') {
+        note.content[itemIdx].done = !note.content[itemIdx].done;
+        saveDB();
+        renderNotes('wara');
+      }
+    }
+
+    function deleteNote(id) {
+      db.waraNotes = db.waraNotes.filter(n => n.id !== id);
+      saveDB();
+      renderNotes('wara');
+    }
+
+    function renderNotes(user) {
+      const container = document.getElementById('wara-notes-list');
+      if (db.waraNotes.length === 0) {
+        container.innerHTML = `<p class="text-slate-400 text-center text-xs py-4">ยังไม่มีโน้ต กดปุ่มด้านบนเพื่อเพิ่มโน้ต</p>`;
+        return;
+      }
+
+      container.innerHTML = db.waraNotes.map(n => {
+        let bodyContent = '';
+        if (n.type === 'text') {
+          bodyContent = `<p class="text-xs text-slate-600 whitespace-pre-line leading-relaxed">${n.content || 'ไม่มีเนื้อหา'}</p>`;
+        } else {
+          bodyContent = `<div class="space-y-1.5 text-xs">` + 
+            n.content.map((item, idx) => `
+              <label class="flex items-center gap-2 cursor-pointer ${item.done ? 'line-through text-slate-400' : 'text-slate-700'}">
+                <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleCheckItem(${n.id}, ${idx})" class="rounded text-pink-500 focus:ring-pink-300">
+                <span>${item.text}</span>
+              </label>
+            `).join('') + `</div>`;
+        }
+
+        return `
+          <div class="bg-white border border-pink-100 rounded-2xl p-3 shadow-sm space-y-2">
+            <div class="flex justify-between items-center cursor-pointer select-none" onclick="toggleNoteExpand(${n.id})">
+              <h5 class="font-bold text-xs text-slate-800 flex items-center gap-1.5">
+                <span>${n.type === 'text' ? '📌' : '☑️'}</span>
+                <span>${n.title}</span>
+              </h5>
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] text-pink-400">จิ้มเพื่ออ่าน</span>
+                <button onclick="event.stopPropagation(); deleteNote(${n.id})" class="text-slate-300 hover:text-red-500">🗑️</button>
+              </div>
+            </div>
+            <div id="note-body-${n.id}" class="hidden-view pt-2 border-t border-pink-50">
+              ${bodyContent}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+
+    // --- PASSWORDS SYSTEM ---
+    function savePassword(user) {
+      const titleInput = document.getElementById(`${user}-pass-title`);
+      const valueInput = document.getElementById(`${user}-pass-value`);
+      const title = titleInput.value.trim();
+      const value = valueInput.value.trim();
+
+      if (!title || !value) return alert('กรุณากรอกทั้งชื่อหัวข้อและรหัสผ่าน');
+
+      const passList = user === 'wara' ? db.waraPasswords : db.chenPasswords;
+      passList.push({ id: Date.now(), title, value });
+      saveDB();
+
+      titleInput.value = '';
+      valueInput.value = '';
+      renderPasswords(user);
+    }
+
+    function deletePassword(user, id) {
+      if (user === 'wara') db.waraPasswords = db.waraPasswords.filter(p => p.id !== id);
+      else db.chenPasswords = db.chenPasswords.filter(p => p.id !== id);
+      saveDB();
+      renderPasswords(user);
+    }
+
+    function togglePassVisibility(id) {
+      const input = document.getElementById(`pass-val-${id}`);
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+
+    function renderPasswords(user) {
+      const container = document.getElementById(`${user}-passwords-list`);
+      const passList = user === 'wara' ? db.waraPasswords : db.chenPasswords;
+      const isWara = user === 'wara';
+
+      if (passList.length === 0) {
+        container.innerHTML = `<p class="text-slate-400 text-center text-xs py-4">ยังไม่มีรหัสผ่านที่บันทึกไว้</p>`;
+        return;
+      }
+
+      container.innerHTML = passList.map(p => `
+        <div class="${isWara ? 'bg-white border-pink-100' : 'bg-[#0b132b] border-slate-700'} border rounded-2xl p-3 shadow-sm space-y-1.5">
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-xs ${isWara ? 'text-pink-600' : 'text-sky-400'}">${p.title}</span>
+            <button onclick="deletePassword('${user}', ${p.id})" class="text-slate-400 hover:text-red-500 text-xs">🗑️</button>
+          </div>
+          <div class="flex gap-2 items-center">
+            <input type="password" id="pass-val-${p.id}" value="${p.value}" readonly class="flex-1 ${isWara ? 'bg-pink-50/50 text-slate-700' : 'bg-[#1c2541] text-white'} rounded-xl px-3 py-1.5 text-xs font-mono border border-slate-200/20">
+            <button onclick="togglePassVisibility(${p.id})" class="${isWara ? 'bg-pink-100 text-pink-600' : 'bg-slate-700 text-sky-300'} text-[11px] px-2.5 py-1.5 rounded-xl font-medium">ดูรหัส</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+
+    // --- CHEN SCHEDULE IMAGE ATTACHMENT ---
+    function uploadScheduleImage(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        db.chenScheduleImg = e.target.result;
+        saveDB();
+        renderScheduleImage();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function deleteScheduleImage() {
+      db.chenScheduleImg = '';
+      saveDB();
+      renderScheduleImage();
+    }
+
+    function renderScheduleImage() {
+      const container = document.getElementById('schedule-image-container');
+      if (db.chenScheduleImg) {
+        container.innerHTML = `
+          <div class="relative w-full h-full flex flex-col items-center">
+            <img src="${db.chenScheduleImg}" class="w-full h-auto max-h-[420px] object-contain rounded-xl shadow-md">
+            <button onclick="deleteScheduleImage()" class="mt-2 bg-red-600/80 hover:bg-red-600 text-white text-xs px-3 py-1 rounded-xl">ลบรูปตารางสอน</button>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `<p class="text-xs text-slate-500">ยังไม่มีรูปตารางเรียน กดแนบรูปด้านบนได้เลย</p>`;
+      }
+    }
+
+
+    // --- CHEN HOMEWORK SYSTEM ---
+    function addHomework() {
+      const title = document.getElementById('hw-title').value.trim();
+      const dateVal = document.getElementById('hw-date').value;
+
+      if (!title || !dateVal) return alert('กรุณากรอกทั้งชื่อการบ้านและวันกำหนดส่ง');
+
+      db.chenHomework.push({
+        id: Date.now(),
+        title,
+        dueDate: dateVal,
+        done: false
+      });
+
+      saveDB();
+      document.getElementById('hw-title').value = '';
+      document.getElementById('hw-date').value = '';
+      renderHomework();
+    }
+
+    function toggleHomeworkStatus(id) {
+      const hw = db.chenHomework.find(h => h.id === id);
+      if (hw) {
+        hw.done = !hw.done;
+        saveDB();
+        renderHomework();
+      }
+    }
+
+    function deleteHomework(id) {
+      db.chenHomework = db.chenHomework.filter(h => h.id !== id);
+      saveDB();
+      renderHomework();
+    }
+
+    function renderHomework() {
+      const container = document.getElementById('homework-list');
+      if (db.chenHomework.length === 0) {
+        container.innerHTML = `<p class="text-slate-400 text-center text-xs py-4">ไม่มีการบ้านที่ค้างอยู่</p>`;
+        return;
+      }
+
+      const today = new Date();
+      today.setHours(0,0,0,0);
+
+      container.innerHTML = db.chenHomework.map(hw => {
+        const dueObj = new Date(hw.dueDate);
+        dueObj.setHours(0,0,0,0);
+
+        const diffTime = dueObj - today;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        let warningBadge = '';
+        if (!hw.done) {
+          if (diffDays < 0) {
+            warningBadge = `<span class="bg-red-950 text-red-400 border border-red-700 text-[10px] px-2 py-0.5 rounded-full">เลยกำหนด!</span>`;
+          } else if (diffDays === 0) {
+            warningBadge = `<span class="bg-red-900 text-red-300 border border-red-500 text-[10px] px-2 py-0.5 rounded-full font-bold animate-pulse">ส่งวันนี้!</span>`;
+          } else if (diffDays <= 2) {
+            warningBadge = `<span class="bg-amber-950 text-amber-300 border border-amber-700 text-[10px] px-2 py-0.5 rounded-full">ใกล้ส่ง (อีก ${diffDays} วัน)</span>`;
+          }
+        }
+
+        return `
+          <div class="bg-[#0b132b] border border-slate-700 rounded-2xl p-3 shadow-sm flex items-center justify-between text-xs">
+            <label class="flex items-center gap-2.5 cursor-pointer flex-1">
+              <input type="checkbox" ${hw.done ? 'checked' : ''} onchange="toggleHomeworkStatus(${hw.id})" class="w-4 h-4 rounded text-sky-500 focus:ring-sky-400">
+              <div class="${hw.done ? 'line-through text-slate-500' : 'text-slate-100'}">
+                <p class="font-medium">${hw.title}</p>
+                <p class="text-[10px] text-slate-400">กำหนดส่ง: ${hw.dueDate} ${warningBadge}</p>
+              </div>
+            </label>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${hw.done ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-slate-800 text-slate-400'}">
+                ${hw.done ? 'เสร็จแล้ว' : 'ยังไม่เสร็จ'}
+              </span>
+              <button onclick="deleteHomework(${hw.id})" class="text-slate-400 hover:text-red-500">🗑️</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // INITIAL RENDER
+    renderCalendar('wara');
+    renderCalendar('chen');
+  </script>
+</body>
+</html>
