@@ -1,562 +1,367 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Couple Planner</title>
-
-    <!-- Font & Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mitr:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Mitr', sans-serif;
-        }
-
-        body {
-            background-color: #fdfbf7;
-            color: #4a4a4a;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        /* --- Welcome Landing Screen --- */
-        .welcome-screen {
-            text-align: center;
-            max-width: 600px;
-            width: 100%;
-            animation: fadeIn 0.8s ease-in-out;
-        }
-
-        .welcome-title {
-            font-size: 2.2rem;
-            color: #d86979;
-            margin-bottom: 8px;
-            font-family: 'Fredoka', cursive, 'Mitr', sans-serif;
-        }
-
-        .welcome-subtitle {
-            font-size: 1.1rem;
-            color: #8c8c8c;
-            margin-bottom: 30px;
-        }
-
-        .profiles-wrapper {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .profile-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px 20px;
-            width: 240px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 2px solid transparent;
-            position: relative;
-        }
-
-        .profile-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-        }
-
-        .profile-card.wara {
-            background: linear-gradient(145deg, #ffffff, #fff0f3);
-        }
-        .profile-card.wara:hover { border-color: #ffb6c1; }
-
-        .profile-card.chen {
-            background: linear-gradient(145deg, #ffffff, #f0f4ff);
-        }
-        .profile-card.chen:hover { border-color: #a0c4ff; }
-
-        .tag {
-            font-size: 0.85rem;
-            padding: 4px 12px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-bottom: 15px;
-            font-weight: 500;
-        }
-
-        .wara .tag { background: #ffe5ec; color: #d86979; }
-        .chen .tag { background: #e2eafc; color: #4a6fa5; }
-
-        .profile-name {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-            font-family: 'Fredoka', 'Mitr', sans-serif;
-        }
-
-        .profile-desc {
-            font-size: 0.85rem;
-            color: #7d7d7d;
-            margin-bottom: 20px;
-        }
-
-        .btn-arrow {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-            color: white;
-            transition: transform 0.2s;
-        }
-
-        .wara .btn-arrow { background: #ff85a1; }
-        .chen .btn-arrow { background: #6c5ce7; }
-
-        .profile-card:hover .btn-arrow {
-            transform: scale(1.1);
-        }
-
-        /* --- Main Planner App (Hidden Initially) --- */
-        .app-container {
-            display: none;
-            width: 100%;
-            max-width: 1000px;
-            background: white;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            padding: 30px;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        .app-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px dashed #f0f0f0;
-        }
-
-        .app-title {
-            font-size: 1.6rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-family: 'Fredoka', 'Mitr', sans-serif;
-        }
-
-        .btn-switch {
-            background: #f5f5f5;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: 0.2s;
-            color: #666;
-        }
-
-        .btn-switch:hover {
-            background: #e0e0e0;
-        }
-
-        /* Responsive Layout Grid */
-        .planner-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 25px;
-        }
-
-        @media (min-width: 768px) {
-            .planner-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .full-width {
-                grid-column: span 2;
-            }
-        }
-
-        .card-box {
-            background: #fafafa;
-            border-radius: 18px;
-            padding: 20px;
-            border: 1px solid #f0f0f0;
-        }
-
-        .box-header {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Calendar Styles */
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
-            text-align: center;
-        }
-
-        .day-name {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #aaa;
-            padding: 5px 0;
-        }
-
-        .day-number {
-            padding: 10px 0;
-            font-size: 0.9rem;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .day-number:hover {
-            background: #e0e0e0;
-        }
-
-        .day-number.today {
-            background: #ff85a1;
-            color: white;
-            font-weight: bold;
-        }
-
-        /* Notes & Todo Styles */
-        .color-picker {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        .color-dot {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
-
-        .color-dot.active {
-            border-color: #555;
-        }
-
-        .input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .input-field {
-            flex: 1;
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            outline: none;
-        }
-
-        .btn-add {
-            background: #ff85a1;
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 12px;
-            cursor: pointer;
-        }
-
-        .list-item {
-            background: white;
-            padding: 12px 15px;
-            border-radius: 12px;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
-        }
-
-        /* Password Safe Styles */
-        .password-item {
-            background: white;
-            padding: 12px 15px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* Chen Specific Styles */
-        .schedule-upload {
-            border: 2px dashed #ccc;
-            border-radius: 12px;
-            padding: 30px;
-            text-align: center;
-            color: #aaa;
-            cursor: pointer;
-        }
-
-        /* Themes */
-        body.theme-wara .app-title { color: #d86979; }
-        body.theme-wara .box-header { color: #ff85a1; }
-        body.theme-wara .btn-add { background: #ff85a1; }
-
-        body.theme-chen .app-title { color: #4a6fa5; }
-        body.theme-chen .box-header { color: #5c7cfa; }
-        body.theme-chen .btn-add { background: #5c7cfa; }
-        body.theme-chen .day-number.today { background: #5c7cfa; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Couple Planner 🐱🕷️</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Prompt -->
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- React & Babel CDNs -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    body {
+      font-family: 'Prompt', sans-serif;
+    }
+  </style>
 </head>
-<body>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex justify-center items-center p-2 sm:p-4">
 
-    <!-- Welcome / Landing Screen -->
-    <div class="welcome-screen" id="welcomeScreen">
-        <h1 class="welcome-title">❤️ แพลนเนอร์บันทึกกิจกรรม (วรา & เชน)</h1>
-        <p class="welcome-subtitle">Couple Planner</p>
+  <div id="root" class="w-full max-w-md"></div>
 
-        <div class="profiles-wrapper">
-            <!-- Profile Wara -->
-            <div class="profile-card wara" onclick="openPlanner('wara')">
-                <span class="tag">🎀 Hello Kitty World</span>
-                <h2 class="profile-name" style="color:#d86979;">วรา</h2>
-                <p class="profile-desc">ปฏิทิน / รหัสผ่าน / โน้ต</p>
-                <div class="btn-arrow"><i class="fas fa-arrow-right"></i></div>
+  <script type="text/babel">
+    const { useState } = React;
+
+    function App() {
+      const [currentView, setCurrentView] = useState('home'); // 'home', 'wara', 'chen'
+      const [waraTab, setWaraTab] = useState('calendar'); // 'calendar', 'notes', 'passwords'
+      const [chenTab, setChenTab] = useState('calendar'); // 'calendar', 'schedule', 'homework'
+      const [selectedDate, setSelectedDate] = useState(4);
+      
+      // ตัวอย่างข้อมูลโน้ตฝั่งวรา
+      const [waraEvents, setWaraEvents] = useState({
+        4: [
+          { text: 'เตรียมกุ้งและแซลมอนสำหรับดอง...', color: 'bg-pink-300 text-pink-900' },
+          { text: 'ซื้อน้ำดองซีอิ๊ว งาขาว และโชยุเข้าบ้าน', color: 'bg-orange-200 text-orange-900' }
+        ]
+      });
+
+      // ตัวอย่างข้อมูลโน้ตฝั่งเชน
+      const [chenEvents, setChenEvents] = useState({
+        4: [{ text: 'เตรียม...', color: 'bg-pink-500 text-white' }],
+        5: [{ text: 'เดินทาง...', color: 'bg-emerald-400 text-slate-950' }]
+      });
+
+      const [inputText, setInputText] = useState('');
+      const [selectedColor, setSelectedColor] = useState('bg-pink-300 text-pink-900');
+
+      const colorOptions = [
+        'bg-pink-300 text-pink-900',
+        'bg-red-400 text-white',
+        'bg-orange-300 text-orange-950',
+        'bg-amber-200 text-amber-950',
+        'bg-stone-300 text-stone-900',
+        'bg-sky-200 text-sky-950',
+        'bg-emerald-200 text-emerald-950',
+        'bg-yellow-100 text-yellow-950',
+        'bg-purple-300 text-purple-950'
+      ];
+
+      const addEvent = (person) => {
+        if (!inputText.trim()) return;
+        const newEntry = { text: inputText, color: selectedColor };
+        if (person === 'wara') {
+          setWaraEvents({
+            ...waraEvents,
+            [selectedDate]: [...(waraEvents[selectedDate] || []), newEntry]
+          });
+        } else {
+          setChenEvents({
+            ...chenEvents,
+            [selectedDate]: [...(chenEvents[selectedDate] || []), newEntry]
+          });
+        }
+        setInputText('');
+      };
+
+      const deleteEvent = (person, index) => {
+        if (person === 'wara') {
+          const list = [...(waraEvents[selectedDate] || [])];
+          list.splice(index, 1);
+          setWaraEvents({ ...waraEvents, [selectedDate]: list });
+        } else {
+          const list = [...(chenEvents[selectedDate] || [])];
+          list.splice(index, 1);
+          setChenEvents({ ...chenEvents, [selectedDate]: list });
+        }
+      };
+
+      // --- หน้าหลัก (HOME) ---
+      if (currentView === 'home') {
+        return (
+          <div class="space-y-6 p-4">
+            {/* Card วรา */}
+            <div 
+              onClick={() => setCurrentView('wara')}
+              class="cursor-pointer bg-gradient-to-r from-pink-400 to-rose-400 rounded-3xl p-6 text-white shadow-lg transform transition hover:scale-105 relative overflow-hidden h-44 flex flex-col justify-between"
+            >
+              <div>
+                <h1 class="text-3xl font-bold flex items-center gap-2">วรา 🌸</h1>
+                <p class="text-sm opacity-90 mt-1">ปฏิทินกิจกรรม • โน้ต • บันทึกรหัสผ่าน</p>
+              </div>
+              <div class="self-end bg-white text-pink-500 rounded-full p-3 shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </div>
             </div>
 
-            <!-- Profile Chen -->
-            <div class="profile-card chen" onclick="openPlanner('chen')">
-                <span class="tag">🕷️ Spidey Zone</span>
-                <h2 class="profile-name" style="color:#4a6fa5;">เชน</h2>
-                <p class="profile-desc">ปฏิทิน / ตารางเรียน / การบ้าน / รหัสผ่าน / โน้ต</p>
-                <div class="btn-arrow"><i class="fas fa-arrow-right"></i></div>
+            {/* Card เชน */}
+            <div 
+              onClick={() => setCurrentView('chen')}
+              class="cursor-pointer bg-gradient-to-r from-indigo-900 via-blue-800 to-sky-500 rounded-3xl p-6 text-white shadow-lg transform transition hover:scale-105 relative overflow-hidden h-44 flex flex-col justify-between"
+            >
+              <div>
+                <span class="inline-block bg-white/20 text-xs px-3 py-1 rounded-full mb-2">🕷️ Spidey Zone</span>
+                <h1 class="text-3xl font-bold flex items-center gap-2">เชน 🕸️</h1>
+                <p class="text-sm opacity-90 mt-1">ปฏิทินกิจกรรม • ตารางเรียน • บันทึกการบ้าน</p>
+              </div>
+              <div class="self-end bg-white text-blue-900 rounded-full p-3 shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+              </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Main Planner Application -->
-    <div class="app-container" id="appContainer">
-        <div class="app-header">
-            <h2 class="app-title" id="appTitle">🎀 Kitty Notes & Secrets</h2>
-            <button class="btn-switch" onclick="closePlanner()"><i class="fas fa-arrow-left"></i> สลับโปรไฟล์</button>
-        </div>
+            <p class="text-center text-xs text-slate-500 pt-8">10/10/2568</p>
+          </div>
+        );
+      }
 
-        <div class="planner-grid">
-            
-            <!-- Calendar Section -->
-            <div class="card-box full-width">
-                <div class="calendar-header">
-                    <h3 class="box-header" style="margin:0;"><i class="far fa-calendar-alt"></i> ปฏิทินบันทึกกิจกรรม</h3>
-                    <div>
-                        <button class="btn-switch" onclick="prevMonth()">&lt;</button>
-                        <span id="currentMonthYear" style="font-weight:600; margin:0 10px;">สิงหาคม 2026</span>
-                        <button class="btn-switch" onclick="nextMonth()">&gt;</button>
+      // --- หน้า วรา (WARA ZONE) ---
+      if (currentView === 'wara') {
+        return (
+          <div class="bg-pink-50 text-slate-800 min-h-screen rounded-3xl p-4 shadow-xl flex flex-col justify-between">
+            <div>
+              {/* Header */}
+              <div class="bg-gradient-to-r from-pink-400 to-rose-300 rounded-2xl p-4 text-white flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold flex items-center gap-2">🎀 Kitty Calendar</h2>
+                <button onClick={() => setCurrentView('home')} class="bg-white/30 hover:bg-white/40 text-white text-sm px-3 py-1.5 rounded-xl transition">
+                  🏠 หน้าแรก
+                </button>
+              </div>
+
+              {/* Month Header */}
+              <div class="flex justify-between items-center px-2 mb-3">
+                <h3 class="text-pink-600 font-bold text-lg">สิงหาคม 2026</h3>
+                <div class="flex gap-2">
+                  <button class="w-8 h-8 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center">‹</button>
+                  <button class="w-8 h-8 rounded-full bg-pink-100 text-pink-600 flex items-center justify-center">›</button>
+                </div>
+              </div>
+
+              {/* Grid Days Header */}
+              <div class="grid grid-cols-7 text-center text-xs font-semibold text-slate-500 mb-2">
+                <span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span>
+              </div>
+
+              {/* Days Grid */}
+              <div class="grid grid-cols-7 gap-1 text-xs mb-6">
+                <div class="h-16 bg-white/40 rounded-xl"></div>
+                {[...Array(31)].map((_, i) => {
+                  const day = i + 1;
+                  const hasEvents = waraEvents[day] && waraEvents[day].length > 0;
+                  const isSelected = selectedDate === day;
+                  return (
+                    <div 
+                      key={day} 
+                      onClick={() => setSelectedDate(day)}
+                      class={`h-16 p-1 rounded-xl border cursor-pointer transition flex flex-col justify-between ${
+                        isSelected ? 'border-pink-400 bg-pink-100/50 ring-2 ring-pink-300' : 'border-pink-100 bg-white/80'
+                      }`}
+                    >
+                      <span class="font-semibold text-slate-700">{day}</span>
+                      <div class="space-y-0.5 overflow-hidden">
+                        {waraEvents[day]?.slice(0, 2).map((ev, idx) => (
+                          <div key={idx} class={`text-[9px] truncate px-1 rounded ${ev.color}`}>
+                            {ev.text}
+                          </div>
+                        ))}
+                      </div>
                     </div>
+                  );
+                })}
+              </div>
+
+              {/* Manage Form */}
+              <div class="bg-white rounded-3xl p-4 border border-pink-100 shadow-sm space-y-3">
+                <h4 class="text-pink-600 font-bold text-center text-base">จัดการข้อความ ( {selectedDate} สิงหาคม )</h4>
+                
+                <div class="text-xs text-slate-500">เลือกสีบันทึก:</div>
+                <div class="flex flex-wrap gap-2">
+                  {colorOptions.map((c, idx) => (
+                    <button 
+                      key={idx} 
+                      onClick={() => setSelectedColor(c)}
+                      class={`w-7 h-7 rounded-full ${c.split(' ')[0]} ${selectedColor === c ? 'ring-2 ring-offset-1 ring-pink-500' : ''}`}
+                    />
+                  ))}
                 </div>
-                <div class="calendar-grid" id="calendarGrid">
-                    <!-- Calendar days generated by JS -->
+
+                <div class="flex gap-2">
+                  <input 
+                    type="text" 
+                    value={inputText}
+                    onChange={(e) => setInputText(e.target.value)}
+                    placeholder="+ บันทึกกิจกรรม..."
+                    class="flex-1 bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2 text-sm focus:outline-none focus:border-pink-400"
+                  />
+                  <button 
+                    onClick={() => addEvent('wara')}
+                    class="bg-pink-500 hover:bg-pink-600 text-white font-medium px-5 py-2 rounded-2xl text-sm transition"
+                  >
+                    เพิ่ม
+                  </button>
                 </div>
+
+                {/* Event List */}
+                <div class="space-y-2 pt-2">
+                  {waraEvents[selectedDate]?.map((ev, index) => (
+                    <div key={index} class="flex justify-between items-center bg-pink-50/60 p-2.5 rounded-2xl border border-pink-100 text-xs">
+                      <div class="flex items-center gap-2">
+                        <span class={`w-3 h-3 rounded-full ${ev.color.split(' ')[0]}`}></span>
+                        <span class="text-slate-700">{ev.text}</span>
+                      </div>
+                      <button onClick={() => deleteEvent('wara', index)} class="text-red-400 hover:text-red-600">🗑️</button>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
-            <!-- Note / Memo Section -->
-            <div class="card-box">
-                <h3 class="box-header"><i class="far fa-sticky-note"></i> โน้ตเตือนความจำ</h3>
-                <div class="color-picker">
-                    <div class="color-dot active" style="background:#ffadad;" onclick="selectColor(this, '#ffadad')"></div>
-                    <div class="color-dot" style="background:#ffd6a5;" onclick="selectColor(this, '#ffd6a5')"></div>
-                    <div class="color-dot" style="background:#fdffb6;" onclick="selectColor(this, '#fdffb6')"></div>
-                    <div class="color-dot" style="background:#caffbf;" onclick="selectColor(this, '#caffbf')"></div>
-                    <div class="color-dot" style="background:#9bf6ff;" onclick="selectColor(this, '#9bf6ff')"></div>
+            {/* Bottom Nav */}
+            <div class="bg-white rounded-2xl mt-4 p-2 flex justify-around border border-pink-100 shadow-sm text-xs">
+              <button onClick={() => setWaraTab('calendar')} class={`flex flex-col items-center gap-1 ${waraTab === 'calendar' ? 'text-pink-500 font-bold' : 'text-slate-400'}`}>
+                📅 <span>ปฏิทิน</span>
+              </button>
+              <button onClick={() => setWaraTab('notes')} class={`flex flex-col items-center gap-1 ${waraTab === 'notes' ? 'text-pink-500 font-bold' : 'text-slate-400'}`}>
+                📝 <span>โน้ต</span>
+              </button>
+              <button onClick={() => setWaraTab('passwords')} class={`flex flex-col items-center gap-1 ${waraTab === 'passwords' ? 'text-pink-500 font-bold' : 'text-slate-400'}`}>
+                🔑 <span>รหัสผ่าน</span>
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      // --- หน้า เชน (SPIDEY ZONE) ---
+      if (currentView === 'chen') {
+        return (
+          <div class="bg-slate-900 text-slate-100 min-h-screen rounded-3xl p-4 shadow-xl flex flex-col justify-between border border-slate-800">
+            <div>
+              {/* Header */}
+              <div class="bg-gradient-to-r from-indigo-900 to-blue-700 rounded-2xl p-4 text-white flex justify-between items-center mb-4 shadow-lg border border-indigo-500/30">
+                <h2 class="text-xl font-bold flex items-center gap-2">🕷️ Spidey Calendar</h2>
+                <button onClick={() => setCurrentView('home')} class="bg-white/20 hover:bg-white/30 text-white text-sm px-3 py-1.5 rounded-xl transition">
+                  🏠 หน้าแรก
+                </button>
+              </div>
+
+              {/* Month Header */}
+              <div class="flex justify-between items-center px-2 mb-3">
+                <h3 class="text-sky-400 font-bold text-lg">สิงหาคม 2026</h3>
+                <div class="flex gap-2">
+                  <button class="w-8 h-8 rounded-full bg-slate-800 text-sky-400 flex items-center justify-center">‹</button>
+                  <button class="w-8 h-8 rounded-full bg-slate-800 text-sky-400 flex items-center justify-center">›</button>
                 </div>
-                <div class="input-group">
-                    <input type="text" id="noteInput" class="input-field" placeholder="เพิ่มข้อความโน้ต...">
-                    <button class="btn-add" onclick="addNote()"><i class="fas fa-plus"></i></button>
-                </div>
-                <div id="notesList">
-                    <div class="list-item" style="background:#fff0f3; border-left:4px solid #ff85a1;">
-                        <span>ซื้อของเข้าหอพัก 🛒</span>
-                        <i class="fas fa-trash-alt" style="color:#aaa; cursor:pointer;" onclick="this.parentElement.remove()"></i>
+              </div>
+
+              {/* Grid Days Header */}
+              <div class="grid grid-cols-7 text-center text-xs font-semibold text-slate-400 mb-2">
+                <span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span>
+              </div>
+
+              {/* Days Grid */}
+              <div class="grid grid-cols-7 gap-1 text-xs mb-6">
+                <div class="h-16 bg-slate-800/40 rounded-xl"></div>
+                {[...Array(31)].map((_, i) => {
+                  const day = i + 1;
+                  const isSelected = selectedDate === day;
+                  return (
+                    <div 
+                      key={day} 
+                      onClick={() => setSelectedDate(day)}
+                      class={`h-16 p-1 rounded-xl border cursor-pointer transition flex flex-col justify-between ${
+                        isSelected ? 'border-red-500 bg-slate-800 ring-2 ring-red-500/50' : 'border-slate-800 bg-slate-800/60'
+                      }`}
+                    >
+                      <span class="font-semibold text-slate-300">{day}</span>
+                      <div class="space-y-0.5 overflow-hidden">
+                        {chenEvents[day]?.slice(0, 2).map((ev, idx) => (
+                          <div key={idx} class={`text-[9px] truncate px-1 rounded ${ev.color}`}>
+                            {ev.text}
+                          </div>
+                        ))}
+                      </div>
                     </div>
+                  );
+                })}
+              </div>
+
+              {/* Manage Form */}
+              <div class="bg-slate-800/80 rounded-3xl p-4 border border-slate-700 shadow-sm space-y-3">
+                <h4 class="text-sky-400 font-bold text-center text-base">จัดการข้อความ ( {selectedDate} สิงหาคม )</h4>
+                
+                <div class="text-xs text-slate-400">เลือกสีบันทึก:</div>
+                <div class="flex flex-wrap gap-2">
+                  {colorOptions.map((c, idx) => (
+                    <button 
+                      key={idx} 
+                      onClick={() => setSelectedColor(c)}
+                      class={`w-7 h-7 rounded-full ${c.split(' ')[0]} ${selectedColor === c ? 'ring-2 ring-offset-2 ring-offset-slate-900 ring-sky-400' : ''}`}
+                    />
+                  ))}
                 </div>
+
+                <div class="flex gap-2">
+                  <input 
+                    type="text" 
+                    value={inputText}
+                    onChange={(e) => setInputText(e.target.value)}
+                    placeholder="+ บันทึกกิจกรรม..."
+                    class="flex-1 bg-slate-900 border border-slate-700 rounded-2xl px-4 py-2 text-sm text-slate-100 focus:outline-none focus:border-sky-400"
+                  />
+                  <button 
+                    onClick={() => addEvent('chen')}
+                    class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-medium px-5 py-2 rounded-2xl text-sm transition shadow-md"
+                  >
+                    เพิ่ม
+                  </button>
+                </div>
+
+                {/* Event List */}
+                <div class="space-y-2 pt-2">
+                  {chenEvents[selectedDate]?.map((ev, index) => (
+                    <div key={index} class="flex justify-between items-center bg-slate-900/80 p-2.5 rounded-2xl border border-slate-700 text-xs">
+                      <div class="flex items-center gap-2">
+                        <span class={`w-3 h-3 rounded-full ${ev.color.split(' ')[0]}`}></span>
+                        <span class="text-slate-200">{ev.text}</span>
+                      </div>
+                      <button onClick={() => deleteEvent('chen', index)} class="text-red-400 hover:text-red-500">🗑️</button>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
-            <!-- Password Vault Section -->
-            <div class="card-box">
-                <h3 class="box-header"><i class="fas fa-key"></i> บันทึกรหัสผ่านส่วนตัว</h3>
-                <div class="input-group">
-                    <input type="text" id="passApp" class="input-field" placeholder="ชื่อแอป/เว็บ">
-                    <input type="password" id="passVal" class="input-field" placeholder="รหัสผ่าน">
-                    <button class="btn-add" onclick="addPassword()"><i class="fas fa-plus"></i></button>
-                </div>
-                <div id="passwordList">
-                    <div class="password-item">
-                        <div>
-                            <strong>Netflix</strong>
-                            <div style="font-size:0.8rem; color:#888;">user@gmail.com</div>
-                        </div>
-                        <span style="font-family:monospace; background:#eee; padding:2px 6px; border-radius:6px;">••••••••</span>
-                    </div>
-                </div>
+            {/* Bottom Nav */}
+            <div class="bg-slate-800 rounded-2xl mt-4 p-2 flex justify-around border border-slate-700 shadow-sm text-xs">
+              <button onClick={() => setChenTab('calendar')} class={`flex flex-col items-center gap-1 ${chenTab === 'calendar' ? 'text-red-400 font-bold' : 'text-slate-400'}`}>
+                📅 <span>ปฏิทิน</span>
+              </button>
+              <button onClick={() => setChenTab('schedule')} class={`flex flex-col items-center gap-1 ${chenTab === 'schedule' ? 'text-red-400 font-bold' : 'text-slate-400'}`}>
+                🎓 <span>ตารางเรียน</span>
+              </button>
+              <button onClick={() => setChenTab('homework')} class={`flex flex-col items-center gap-1 ${chenTab === 'homework' ? 'text-red-400 font-bold' : 'text-slate-400'}`}>
+                📖 <span>การบ้าน</span>
+              </button>
             </div>
+          </div>
+        );
+      }
+    }
 
-            <!-- Chen Specific: Timetable & Homework -->
-            <div class="card-box full-width" id="chenFeatures" style="display:none;">
-                <h3 class="box-header"><i class="fas fa-graduation-cap"></i> ตารางเรียน & รายการการบ้าน (สำหรับเชน)</h3>
-                <div class="planner-grid" style="grid-template-columns: 1fr 1fr;">
-                    <div>
-                        <p style="font-weight:600; margin-bottom:10px;">📸 ตารางเรียน</p>
-                        <div class="schedule-upload" onclick="document.getElementById('fileInput').click()">
-                            <i class="fas fa-cloud-upload-alt" style="font-size:2rem; margin-bottom:10px;"></i>
-                            <p>คลิกเพื่ออัปโหลดรูปตารางเรียน</p>
-                            <input type="file" id="fileInput" style="display:none" onchange="previewSchedule(this)">
-                        </div>
-                        <img id="schedulePreview" style="width:100%; margin-top:10px; border-radius:12px; display:none;">
-                    </div>
-                    <div>
-                        <p style="font-weight:600; margin-bottom:10px;">📝 รายการการบ้าน</p>
-                        <div class="input-group">
-                            <input type="text" id="hwInput" class="input-field" placeholder="การบ้านที่ต้องส่ง...">
-                            <button class="btn-add" onclick="addHomework()"><i class="fas fa-plus"></i></button>
-                        </div>
-                        <div id="hwList">
-                            <div class="list-item">
-                                <span>รายงานการตลาด (ส่งอาทิตย์หน้า)</span>
-                                <input type="checkbox">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <script>
-        let selectedColor = '#ffadad';
-        let currentUser = '';
-
-        function openPlanner(user) {
-            currentUser = user;
-            document.getElementById('welcomeScreen').style.display = 'none';
-            document.getElementById('appContainer').style.display = 'block';
-
-            const appTitle = document.getElementById('appTitle');
-            const chenFeatures = document.getElementById('chenFeatures');
-
-            if (user === 'wara') {
-                document.body.className = 'theme-wara';
-                appTitle.innerHTML = '🎀 Kitty Notes & Secrets (วรา)';
-                chenFeatures.style.display = 'none';
-            } else {
-                document.body.className = 'theme-chen';
-                appTitle.innerHTML = '🕷️ Spidey Zone (เชน)';
-                chenFeatures.style.display = 'block';
-            }
-
-            renderCalendar();
-        }
-
-        function closePlanner() {
-            document.body.className = '';
-            document.getElementById('welcomeScreen').style.display = 'block';
-            document.getElementById('appContainer').style.display = 'none';
-        }
-
-        function selectColor(el, color) {
-            document.querySelectorAll('.color-dot').forEach(dot => dot.classList.remove('active'));
-            el.classList.add('active');
-            selectedColor = color;
-        }
-
-        function addNote() {
-            const input = document.getElementById('noteInput');
-            if (!input.value.trim()) return;
-
-            const list = document.getElementById('notesList');
-            const item = document.createElement('div');
-            item.className = 'list-item';
-            item.style.background = selectedColor;
-            item.innerHTML = `<span>${input.value}</span><i class="fas fa-trash-alt" style="color:#666; cursor:pointer;" onclick="this.parentElement.remove()"></i>`;
-            list.appendChild(item);
-            input.value = '';
-        }
-
-        function addPassword() {
-            const app = document.getElementById('passApp');
-            const val = document.getElementById('passVal');
-            if (!app.value.trim() || !val.value.trim()) return;
-
-            const list = document.getElementById('passwordList');
-            const item = document.createElement('div');
-            item.className = 'password-item';
-            item.innerHTML = `<div><strong>${app.value}</strong></div><span style="font-family:monospace; background:#eee; padding:2px 6px; border-radius:6px;">${val.value}</span>`;
-            list.appendChild(item);
-            app.value = '';
-            val.value = '';
-        }
-
-        function addHomework() {
-            const input = document.getElementById('hwInput');
-            if (!input.value.trim()) return;
-
-            const list = document.getElementById('hwList');
-            const item = document.createElement('div');
-            item.className = 'list-item';
-            item.innerHTML = `<span>${input.value}</span><input type="checkbox">`;
-            list.appendChild(item);
-            input.value = '';
-        }
-
-        function previewSchedule(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = document.getElementById('schedulePreview');
-                    img.src = e.target.result;
-                    img.style.display = 'block';
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        function renderCalendar() {
-            const grid = document.getElementById('calendarGrid');
-            grid.innerHTML = '';
-            const days = ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'];
-            
-            days.forEach(d => {
-                grid.innerHTML += `<div class="day-name">${d}</div>`;
-            });
-
-            for (let i = 1; i <= 31; i++) {
-                const isToday = i === 26 ? 'today' : '';
-                grid.innerHTML += `<div class="day-number ${isToday}">${i}</div>`;
-            }
-        }
-    </script>
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
 </body>
 </html>
