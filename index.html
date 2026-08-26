@@ -134,12 +134,23 @@
                 </label>
               </div>
 
+              <!-- โน้ตปกติ -->
               <textarea id="wara-note-content-text" rows="3" placeholder="เนื้อหาโน้ต..." class="w-full bg-white border border-pink-200 rounded-xl p-2.5 text-xs focus:outline-none"></textarea>
-              <textarea id="wara-note-content-list" rows="3" placeholder="ใส่รายการ (แยกด้วยการขึ้นบรรทัดใหม่)" class="hidden-view w-full bg-white border border-pink-200 rounded-xl p-2.5 text-xs focus:outline-none"></textarea>
+              
+              <!-- เช็กลิสต์แบบเพิ่มทีละข้อ -->
+              <div id="wara-note-content-list-container" class="hidden-view space-y-2">
+                <div class="flex gap-2">
+                  <input type="text" id="wara-list-item-input" placeholder="พิมพ์ข้อความเช็กลิสต์..." class="flex-1 bg-white border border-pink-200 rounded-xl px-3 py-1.5 text-xs focus:outline-none" onkeypress="if(event.key === 'Y' || event.key === 'Enter') { addTempListItem(); event.preventDefault(); }">
+                  <button type="button" onclick="addTempListItem()" class="bg-pink-400 text-white px-3 py-1.5 rounded-xl text-xs font-medium">เพิ่มข้อ</button>
+                </div>
+                <div id="wara-temp-list-preview" class="space-y-1.5 bg-white/80 p-2 rounded-xl border border-pink-100 max-h-28 overflow-y-auto text-xs">
+                  <p class="text-slate-400 text-[11px] text-center">ยังไม่มีรายการในเช็กลิสต์</p>
+                </div>
+              </div>
 
-              <div class="flex justify-end gap-2">
+              <div class="flex justify-end gap-2 pt-1">
                 <button onclick="hideAddNoteModal('wara')" class="bg-slate-200 text-slate-600 px-3 py-1 rounded-xl">ยกเลิก</button>
-                <button onclick="saveNote('wara')" class="bg-[#ff758f] text-white px-4 py-1 rounded-xl font-medium">บันทึก</button>
+                <button onclick="saveNote('wara')" class="bg-[#ff758f] text-white px-4 py-1 rounded-xl font-medium">บันทึกโน้ต</button>
               </div>
             </div>
 
@@ -349,6 +360,7 @@
     let selectedChenDateStr = formatDateKey(new Date());
     let selectedWaraColor = '#ffb3c1';
     let selectedChenColor = '#ff8a80';
+    let tempWaraListItems = [];
 
     function formatDateKey(dateObj) {
       const y = dateObj.getFullYear();
@@ -589,6 +601,8 @@
 
     function showAddNoteModal(user) {
       document.getElementById(`${user}-note-form`).classList.remove('hidden-view');
+      tempWaraListItems = [];
+      renderTempListPreview();
     }
     function hideAddNoteModal(user) {
       document.getElementById(`${user}-note-form`).classList.add('hidden-view');
@@ -598,11 +612,43 @@
       const type = document.querySelector(`input[name="${user}-note-type"]:checked`).value;
       if (type === 'text') {
         document.getElementById(`${user}-note-content-text`).classList.remove('hidden-view');
-        document.getElementById(`${user}-note-content-list`).classList.add('hidden-view');
+        document.getElementById(`${user}-note-content-list-container`).classList.add('hidden-view');
       } else {
         document.getElementById(`${user}-note-content-text`).classList.add('hidden-view');
-        document.getElementById(`${user}-note-content-list`).classList.remove('hidden-view');
+        document.getElementById(`${user}-note-content-list-container`).classList.remove('hidden-view');
       }
+    }
+
+    function addTempListItem() {
+      const input = document.getElementById('wara-list-item-input');
+      const val = input.value.trim();
+      if (!val) return;
+      tempWaraListItems.push({ text: val, done: false });
+      input.value = '';
+      input.focus();
+      renderTempListPreview();
+    }
+
+    function removeTempListItem(idx) {
+      tempWaraListItems.splice(idx, 1);
+      renderTempListPreview();
+    }
+
+    function renderTempListPreview() {
+      const container = document.getElementById('wara-temp-list-preview');
+      if (tempWaraListItems.length === 0) {
+        container.innerHTML = `<p class="text-slate-400 text-[11px] text-center">ยังไม่มีรายการในเช็กลิสต์</p>`;
+        return;
+      }
+      container.innerHTML = tempWaraListItems.map((item, idx) => `
+        <div class="flex items-center justify-between bg-white px-2 py-1 rounded-lg border border-pink-100 text-xs">
+          <div class="flex items-center gap-2">
+            <span class="w-3.5 h-3.5 rounded-full border border-pink-400 inline-block"></span>
+            <span class="text-slate-700">${item.text}</span>
+          </div>
+          <button type="button" onclick="removeTempListItem(${idx})" class="text-slate-300 hover:text-red-500 text-[10px]">✕</button>
+        </div>
+      `).join('');
     }
 
     function saveNote(user) {
@@ -614,8 +660,8 @@
       if (type === 'text') {
         content = document.getElementById(`${user}-note-content-text`).value.trim();
       } else {
-        const rawList = document.getElementById(`${user}-note-content-list`).value.split('\n').filter(i => i.trim() !== '');
-        content = rawList.map(t => ({ text: t, done: false }));
+        if (tempWaraListItems.length === 0) return alert('กรุณาเพิ่มรายการเช็กลิสต์อย่างน้อย 1 ข้อ');
+        content = [...tempWaraListItems];
       }
 
       if (!window.db.waraNotes) window.db.waraNotes = [];
@@ -624,7 +670,7 @@
 
       document.getElementById(`${user}-note-title`).value = '';
       document.getElementById(`${user}-note-content-text`).value = '';
-      document.getElementById(`${user}-note-content-list`).value = '';
+      tempWaraListItems = [];
       hideAddNoteModal(user);
       renderNotes(user);
     }
