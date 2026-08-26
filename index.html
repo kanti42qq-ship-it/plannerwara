@@ -6,6 +6,28 @@
   <title>Couple Planner 🐱🕷️</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Firebase SDKs (v10.8.0) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+
+    // Firebase configuration[cite: 2]
+    const firebaseConfig = {
+      apiKey: "AIzaSyAoL4mmINcWiVD4JB2keDEZCHq6Ned83y0",
+      authDomain: "planner-f3651.firebaseapp.com",
+      projectId: "planner-f3651",
+      storageBucket: "planner-f3651.firebasestorage.app",
+      messagingSenderId: "866742028518",
+      appId: "1:866742028518:web:e18638667f4541e4d19327",
+      measurementId: "G-C3ZS2SM3XW"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
+
   <style>
     body { font-family: 'Prompt', sans-serif; }
     .hidden-view { display: none !important; }
