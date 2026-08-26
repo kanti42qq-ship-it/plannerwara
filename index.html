@@ -358,6 +358,8 @@
     let selectedWaraColor = '#ffb3c1';
     let selectedChenColor = '#ff8a80';
     let tempWaraListItems = [];
+    // จำสถานะโน้ตที่เปิดอยู่ (บันทึก ID ไว้เพื่อไม่ให้มันยุบเองเวลาติ๊ก)
+    let openNoteIds = {};
 
     function formatDateKey(dateObj) {
       const y = dateObj.getFullYear();
@@ -673,20 +675,23 @@
     }
 
     function toggleNoteExpand(id) {
-      const el = document.getElementById(`note-body-${id}`);
-      el.classList.toggle('hidden-view');
+      openNoteIds[id] = !openNoteIds[id];
+      renderNotes('wara');
     }
 
     function toggleCheckItem(noteId, itemIdx) {
       const note = window.db.waraNotes.find(n => n.id === noteId);
       if (note && note.type === 'list') {
         note.content[itemIdx].done = !note.content[itemIdx].done;
+        // คงสถานะให้โน้ตกางค้างไว้ ไม่ยุบตัวลง
+        openNoteIds[noteId] = true;
         saveDB();
         renderNotes('wara');
       }
     }
 
     function deleteNote(id) {
+      delete openNoteIds[id];
       window.db.waraNotes = window.db.waraNotes.filter(n => n.id !== id);
       saveDB();
       renderNotes('wara');
@@ -701,6 +706,7 @@
       }
 
       container.innerHTML = notes.map(n => {
+        const isOpen = !!openNoteIds[n.id];
         let bodyContent = '';
         if (n.type === 'text') {
           bodyContent = `<p class="text-xs text-slate-600 whitespace-pre-line leading-relaxed">${n.content || 'ไม่มีเนื้อหา'}</p>`;
@@ -723,11 +729,11 @@
                 ${n.type === 'list' ? `<span class="text-[10px] bg-pink-100 text-pink-600 px-2 py-0.5 rounded-full font-normal">(${n.content.length} ข้อ)</span>` : ''}
               </h5>
               <div class="flex items-center gap-2">
-                <span class="text-[10px] text-pink-400">จิ้มเพื่ออ่าน</span>
+                <span class="text-[10px] text-pink-400">${isOpen ? 'ซ่อน' : 'จิ้มเพื่ออ่าน'}</span>
                 <button onclick="event.stopPropagation(); deleteNote(${n.id})" class="text-slate-300 hover:text-red-500">🗑️</button>
               </div>
             </div>
-            <div id="note-body-${n.id}" class="hidden-view pt-2 border-t border-pink-50">
+            <div id="note-body-${n.id}" class="${isOpen ? '' : 'hidden-view'} pt-2 border-t border-pink-50">
               ${bodyContent}
             </div>
           </div>
