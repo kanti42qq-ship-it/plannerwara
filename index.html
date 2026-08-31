@@ -7,6 +7,13 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
+  <!-- ตั้งค่าสำหรับให้ไอโฟนมองเป็นเว็บแอปเวลา Add to Home Screen -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Couple Planner">
+  <!-- ไอคอนที่จะโชว์บนหน้าจอโฮมไอโฟน (เปลี่ยนลิงก์รูปตรง href เป็นรูปที่ชอบได้เลย) -->
+  <link rel="apple-touch-icon" href="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=500&auto=format&fit=crop&q=80">
+
   <style>
     body { font-family: 'Prompt', sans-serif; }
     .hidden-view { display: none !important; }
@@ -31,35 +38,52 @@
   <div class="w-full max-w-md min-h-[680px] flex flex-col justify-between">
 
     <!-- ================= 1. หน้าหลัก (HOME) ================= -->
-    <div id="view-home" class="space-y-6 p-2 my-auto">
+    <div id="view-home" class="space-y-5 p-2 my-auto">
       
+      <!-- ส่วนหัวข้อหลัก / โชว์รูปคู่หรือรูปแมวตรงหน้าแรก -->
+      <div class="text-center space-y-2">
+        <div class="inline-flex items-center justify-center relative">
+          <!-- กรอบรูปโปรไฟล์คู่ / รูปแมวหน้าแรก (กดเปลี่ยนรูปได้จากเครื่อง) -->
+          <label class="cursor-pointer group relative block w-24 h-24 rounded-full p-1 bg-white/40 backdrop-blur-md shadow-lg overflow-hidden border-2 border-white">
+            <div id="home-avatar-display" class="w-full h-full rounded-full bg-pink-100 flex items-center justify-center text-3xl overflow-hidden">
+              🐱❤️
+            </div>
+            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-[10px] font-medium text-center p-1">
+              เปลี่ยนรูป
+            </div>
+            <input type="file" accept="image/*" class="hidden" onchange="uploadHomeAvatar(event)">
+          </label>
+        </div>
+        <h2 class="text-white font-bold text-lg drop-shadow-sm">Our Lovely Space ✨</h2>
+      </div>
+
       <!-- Card วรา -->
-      <div onclick="switchView('wara')" class="bounce-card cursor-pointer bg-gradient-to-br from-[#ff5e97] via-[#ff758f] to-[#ff9ebb] rounded-[2.5rem] p-6 text-white shadow-wara-3d border-2 border-white/40 relative overflow-hidden h-48 flex flex-col justify-between">
+      <div onclick="switchView('wara')" class="bounce-card cursor-pointer bg-gradient-to-br from-[#ff5e97] via-[#ff758f] to-[#ff9ebb] rounded-[2.5rem] p-6 text-white shadow-wara-3d border-2 border-white/40 relative overflow-hidden h-44 flex flex-col justify-between">
         <div class="absolute -right-3 -bottom-5 opacity-30 text-9xl pointer-events-none select-none">🎀</div>
         <div>
           <span class="inline-flex items-center gap-1 bg-white/90 text-[#ff4081] text-xs font-bold px-3 py-1 rounded-full mb-2 shadow-sm backdrop-blur-sm">
             🎀 Hello Kitty World
           </span>
           <h1 class="text-3xl font-extrabold tracking-wide drop-shadow-sm">วรา 🌸</h1>
-          <p class="text-xs text-white/95 mt-1 font-light">ปฏิทินกิจกรรม • โน้ต & ลิสต์ • บันทึกรหัสผ่าน</p>
+          <p class="text-xs text-white/95 mt-1 font-light">ปฏิทิน • โน้ต & ลิสต์ • บันทึกรหัสผ่าน</p>
         </div>
-        <div class="self-end bg-white text-[#ff4081] rounded-full p-3 shadow-lg flex items-center justify-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 stroke-[3]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        <div class="self-end bg-white text-[#ff4081] rounded-full p-2.5 shadow-lg flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-[3]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </div>
       </div>
 
       <!-- Card เชน -->
-      <div onclick="switchView('chen')" class="bounce-card cursor-pointer bg-gradient-to-br from-[#d81b60] via-[#7b1fa2] to-[#0284c7] rounded-[2.5rem] p-6 text-white shadow-chen-3d border-2 border-white/30 relative overflow-hidden h-48 flex flex-col justify-between">
+      <div onclick="switchView('chen')" class="bounce-card cursor-pointer bg-gradient-to-br from-[#d81b60] via-[#7b1fa2] to-[#0284c7] rounded-[2.5rem] p-6 text-white shadow-chen-3d border-2 border-white/30 relative overflow-hidden h-44 flex flex-col justify-between">
         <div class="absolute -right-3 -bottom-5 opacity-30 text-9xl pointer-events-none select-none">🕷️</div>
         <div>
           <span class="inline-flex items-center gap-1 bg-white/90 text-[#0284c7] text-xs font-bold px-3 py-1 rounded-full mb-2 shadow-sm backdrop-blur-sm">
             🕷️ Spidey Zone
           </span>
           <h1 class="text-3xl font-extrabold tracking-wide drop-shadow-sm">เชน 🕸️</h1>
-          <p class="text-xs text-white/95 mt-1 font-light">ปฏิทิน • ตารางเรียนแนบรูป • การบ้าน • รหัสผ่าน</p>
+          <p class="text-xs text-white/95 mt-1 font-light">ปฏิทิน • ตารางเรียน • การบ้าน • รหัสผ่าน</p>
         </div>
-        <div class="self-end bg-white text-[#0284c7] rounded-full p-3 shadow-lg flex items-center justify-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 stroke-[3]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        <div class="self-end bg-white text-[#0284c7] rounded-full p-2.5 shadow-lg flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 stroke-[3]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </div>
       </div>
 
@@ -101,8 +125,6 @@
               <button onclick="selectColor('wara', '#b5e2fa')" class="color-btn-wara w-6 h-6 rounded-full bg-[#b5e2fa]" data-color="#b5e2fa"></button>
               <button onclick="selectColor('wara', '#c7f9cc')" class="color-btn-wara w-6 h-6 rounded-full bg-[#c7f9cc]" data-color="#c7f9cc"></button>
               <button onclick="selectColor('wara', '#fffffc')" class="color-btn-wara w-6 h-6 rounded-full bg-[#fffffc] border border-slate-300" data-color="#fffffc"></button>
-              <button onclick="selectColor('wara', '#ffe5ec')" class="color-btn-wara w-6 h-6 rounded-full bg-[#ffe5ec]" data-color="#ffe5ec"></button>
-              <button onclick="selectColor('wara', '#fde2e4')" class="color-btn-wara w-6 h-6 rounded-full bg-[#fde2e4]" data-color="#fde2e4"></button>
             </div>
 
             <div class="flex gap-2">
@@ -130,17 +152,17 @@
                   <input type="radio" name="wara-note-type" value="text" checked onchange="toggleNoteInputType('wara')"> โน้ตปกติ
                 </label>
                 <label class="flex items-center gap-1 cursor-pointer">
-                  <input type="radio" name="wara-note-type" value="list" onchange="toggleNoteInputType('wara')"> เช็กลิสต์ไอโฟน (เพิ่มได้รัวๆ)
+                  <input type="radio" name="wara-note-type" value="list" onchange="toggleNoteInputType('wara')"> เช็กลิสต์ไอโฟน
                 </label>
               </div>
 
               <!-- โน้ตปกติ -->
               <textarea id="wara-note-content-text" rows="3" placeholder="เนื้อหาโน้ต..." class="w-full bg-white border border-pink-200 rounded-xl p-2.5 text-xs focus:outline-none"></textarea>
               
-              <!-- เช็กลิสต์แบบเพิ่มทีละข้อต่อเนื่อง -->
+              <!-- เช็กลิสต์ -->
               <div id="wara-note-content-list-container" class="hidden-view space-y-2">
                 <div class="flex gap-2">
-                  <input type="text" id="wara-list-item-input" placeholder="พิมพ์รายการแล้วกด Enter หรือปุ่มเพิ่ม..." class="flex-1 bg-white border border-pink-200 rounded-xl px-3 py-1.5 text-xs focus:outline-none" onkeypress="if(event.key === 'Enter') { addTempListItem(); event.preventDefault(); }">
+                  <input type="text" id="wara-list-item-input" placeholder="พิมพ์รายการแล้วกด Enter..." class="flex-1 bg-white border border-pink-200 rounded-xl px-3 py-1.5 text-xs focus:outline-none" onkeypress="if(event.key === 'Enter') { addTempListItem(); event.preventDefault(); }">
                   <button type="button" onclick="addTempListItem()" class="bg-pink-400 text-white px-3 py-1.5 rounded-xl text-xs font-medium shrink-0">เพิ่มข้อ</button>
                 </div>
                 <div id="wara-temp-list-preview" class="space-y-1.5 bg-white/90 p-2.5 rounded-xl border border-pink-100 max-h-36 overflow-y-auto text-xs">
@@ -161,10 +183,10 @@
         <!-- แท็บ 3: รหัสผ่าน -->
         <div id="wara-sub-passwords" class="hidden-view space-y-3">
           <div class="bg-white rounded-3xl p-4 shadow-sm space-y-3">
-            <h4 class="text-[#ff477e] font-bold text-sm">🔑 Kitty Secrets (บันทึกรหัสผ่าน)</h4>
+            <h4 class="text-[#ff477e] font-bold text-sm">🔑 Kitty Secrets (รหัสผ่าน)</h4>
             
             <div class="bg-pink-50/50 p-3 rounded-2xl space-y-2 border border-pink-100 text-xs">
-              <input type="text" id="wara-pass-title" placeholder="ชื่อหัวข้อ (เช่น IG, Shopee, Gmail)..." class="w-full bg-white border border-pink-200 rounded-xl px-3 py-2 focus:outline-none">
+              <input type="text" id="wara-pass-title" placeholder="ชื่อหัวข้อ (เช่น IG, Shopee)..." class="w-full bg-white border border-pink-200 rounded-xl px-3 py-2 focus:outline-none">
               <input type="text" id="wara-pass-value" placeholder="รหัสผ่าน..." class="w-full bg-white border border-pink-200 rounded-xl px-3 py-2 focus:outline-none font-mono">
               <button onclick="savePassword('wara')" class="w-full bg-[#ff758f] text-white font-bold py-2 rounded-xl text-xs shadow-sm hover:bg-[#ff5e97]">บันทึกรหัสผ่าน</button>
             </div>
@@ -218,8 +240,6 @@
               <button onclick="selectColor('chen', '#b388ff')" class="color-btn-chen w-6 h-6 rounded-full bg-[#b388ff]" data-color="#b388ff"></button>
               <button onclick="selectColor('chen', '#8c9eff')" class="color-btn-chen w-6 h-6 rounded-full bg-[#8c9eff]" data-color="#8c9eff"></button>
               <button onclick="selectColor('chen', '#80d8ff')" class="color-btn-chen w-6 h-6 rounded-full bg-[#80d8ff]" data-color="#80d8ff"></button>
-              <button onclick="selectColor('chen', '#a7ffeb')" class="color-btn-chen w-6 h-6 rounded-full bg-[#a7ffeb]" data-color="#a7ffeb"></button>
-              <button onclick="selectColor('chen', '#ccff90')" class="color-btn-chen w-6 h-6 rounded-full bg-[#ccff90]" data-color="#ccff90"></button>
             </div>
 
             <div class="flex gap-2">
@@ -277,10 +297,10 @@
         <!-- แท็บ 4: รหัสผ่าน -->
         <div id="chen-sub-passwords" class="hidden-view space-y-3">
           <div class="bg-[#1c2541] rounded-3xl p-4 border border-slate-700/50 space-y-3">
-            <h4 class="text-sky-400 font-bold text-sm">🔑 Spidey Secrets (บันทึกรหัสผ่าน)</h4>
+            <h4 class="text-sky-400 font-bold text-sm">🔑 Spidey Secrets (รหัสผ่าน)</h4>
             
             <div class="bg-[#0b132b] p-3 rounded-2xl space-y-2 border border-slate-700 text-xs">
-              <input type="text" id="chen-pass-title" placeholder="ชื่อหัวข้อ (เช่น Steam, Facebook, Mail)..." class="w-full bg-[#1c2541] border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none">
+              <input type="text" id="chen-pass-title" placeholder="ชื่อหัวข้อ (เช่น Steam, Facebook)..." class="w-full bg-[#1c2541] border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none">
               <input type="text" id="chen-pass-value" placeholder="รหัสผ่าน..." class="w-full bg-[#1c2541] border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none font-mono">
               <button onclick="savePassword('chen')" class="w-full bg-gradient-to-r from-[#d81b60] to-[#0284c7] text-white font-bold py-2 rounded-xl text-xs shadow-sm">บันทึกรหัสผ่าน</button>
             </div>
@@ -325,7 +345,8 @@
       waraPasswords: [],
       chenPasswords: [],
       chenScheduleImg: '',
-      chenHomework: []
+      chenHomework: [],
+      homeAvatarImg: ''
     };
 
     onSnapshot(doc(dbFirestore, "planners", "shared_data"), (snapshot) => {
@@ -338,6 +359,7 @@
         renderPasswords('chen');
         renderScheduleImage();
         renderHomework();
+        renderHomeAvatar();
       }
     });
 
@@ -358,8 +380,6 @@
     let selectedWaraColor = '#ffb3c1';
     let selectedChenColor = '#ff8a80';
     let tempWaraListItems = [];
-    
-    // เก็บสถานะว่าโน้ตตัวไหนกำลังกางอยู่ (ใช้ Map หรือ Object ธรรมดาที่จำค่าข้ามการเรนเดอร์)
     window.openNoteStates = {};
 
     function formatDateKey(dateObj) {
@@ -379,6 +399,28 @@
 
       if (viewName === 'wara') { renderCalendar('wara'); renderNotes('wara'); renderPasswords('wara'); }
       if (viewName === 'chen') { renderCalendar('chen'); renderScheduleImage(); renderHomework(); renderPasswords('chen'); }
+      if (viewName === 'home') { renderHomeAvatar(); }
+    }
+
+    function uploadHomeAvatar(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        window.db.homeAvatarImg = e.target.result;
+        saveDB();
+        renderHomeAvatar();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function renderHomeAvatar() {
+      const container = document.getElementById('home-avatar-display');
+      if (window.db.homeAvatarImg) {
+        container.innerHTML = `<img src="${window.db.homeAvatarImg}" class="w-full h-full object-cover rounded-full">`;
+      } else {
+        container.innerHTML = `🐱❤️`;
+      }
     }
 
     function switchWaraTab(tabIndex) {
@@ -507,15 +549,7 @@
       const isWara = user === 'wara';
       const dateObj = isWara ? currentWaraDate : currentChenDate;
       const now = new Date();
-      
-      const minYear = now.getFullYear() - 2;
-      const maxYear = now.getFullYear() + 5;
-
       dateObj.setMonth(dateObj.getMonth() + delta);
-      
-      if (dateObj.getFullYear() < minYear) dateObj.setFullYear(minYear, 0, 1);
-      if (dateObj.getFullYear() > maxYear) dateObj.setFullYear(maxYear, 11, 31);
-
       renderCalendar(user);
     }
 
@@ -637,7 +671,7 @@
     function renderTempListPreview() {
       const container = document.getElementById('wara-temp-list-preview');
       if (tempWaraListItems.length === 0) {
-        container.innerHTML = `<p class="text-slate-400 text-[11px] text-center">ยังไม่มีรายการในเช็กลิสต์ (พิมพ์เพิ่มด้านบนได้เลย)</p>`;
+        container.innerHTML = `<p class="text-slate-400 text-[11px] text-center">ยังไม่มีรายการในเช็กลิสต์</p>`;
         return;
       }
       container.innerHTML = tempWaraListItems.map((item, idx) => `
@@ -684,7 +718,6 @@
       const note = window.db.waraNotes.find(n => n.id === noteId);
       if (note && note.type === 'list') {
         note.content[itemIdx].done = !note.content[itemIdx].done;
-        // ล็อกสถานะให้เปิดค้างไว้แน่นอน
         window.openNoteStates[noteId] = true;
         saveDB();
         renderNotes('wara');
@@ -702,7 +735,7 @@
       const container = document.getElementById('wara-notes-list');
       const notes = window.db.waraNotes || [];
       if (notes.length === 0) {
-        container.innerHTML = `<p class="text-slate-400 text-center text-xs py-4">ยังไม่มีโน้ต กดปุ่มด้านบนเพื่อเพิ่มโน้ต</p>`;
+        container.innerHTML = `<p class="text-slate-400 text-center text-xs py-4">ยังไม่มีโน้ต</p>`;
         return;
       }
 
@@ -730,7 +763,7 @@
                 ${n.type === 'list' ? `<span class="text-[10px] bg-pink-100 text-pink-600 px-2 py-0.5 rounded-full font-normal">(${n.content.length} ข้อ)</span>` : ''}
               </h5>
               <div class="flex items-center gap-2">
-                <span class="text-[10px] text-pink-400">${isOpen ? 'ซ่อน' : 'จิ้มเพื่ออ่าน'}</span>
+                <span class="text-[10px] text-pink-400">${isOpen ? 'ซ่อน' : 'อ่าน'}</span>
                 <button onclick="event.stopPropagation(); deleteNote(${n.id})" class="text-slate-300 hover:text-red-500">🗑️</button>
               </div>
             </div>
@@ -748,7 +781,7 @@
       const title = titleInput.value.trim();
       const value = valueInput.value.trim();
 
-      if (!title || !value) return alert('กรุณากรอกทั้งชื่อหัวข้อและรหัสผ่าน');
+      if (!title || !value) return alert('กรุณากรอกทั้งหัวข้อและรหัสผ่าน');
 
       if (user === 'wara') {
         if (!window.db.waraPasswords) window.db.waraPasswords = [];
@@ -782,7 +815,7 @@
       const isWara = user === 'wara';
 
       if (passList.length === 0) {
-        container.innerHTML = `<p class="text-slate-400 text-center text-xs py-4">ยังไม่มีรหัสผ่านที่บันทึกไว้</p>`;
+        container.innerHTML = `<p class="text-slate-400 text-center text-xs py-4">ยังไม่มีรหัสผ่าน</p>`;
         return;
       }
 
@@ -794,7 +827,7 @@
           </div>
           <div class="flex gap-2 items-center">
             <input type="password" id="pass-val-${p.id}" value="${p.value}" readonly class="flex-1 ${isWara ? 'bg-pink-50/50 text-slate-700' : 'bg-[#1c2541] text-white'} rounded-xl px-3 py-1.5 text-xs font-mono border border-slate-200/20">
-            <button onclick="togglePassVisibility(${p.id})" class="${isWara ? 'bg-pink-100 text-pink-600' : 'bg-slate-700 text-sky-300'} text-[11px] px-2.5 py-1.5 rounded-xl font-medium">ดูรหัส</button>
+            <button onclick="togglePassVisibility(${p.id})" class="${isWara ? 'bg-pink-100 text-pink-600' : 'bg-slate-700 text-sky-300'} text-[11px] px-2.5 py-1.5 rounded-xl font-medium">ดู</button>
           </div>
         </div>
       `).join('');
@@ -803,7 +836,6 @@
     function uploadScheduleImage(event) {
       const file = event.target.files[0];
       if (!file) return;
-
       const reader = new FileReader();
       reader.onload = function(e) {
         window.db.chenScheduleImg = e.target.result;
@@ -829,7 +861,7 @@
           </div>
         `;
       } else {
-        container.innerHTML = `<p class="text-xs text-slate-500">ยังไม่มีรูปตารางเรียน กดแนบรูปด้านบนได้เลย</p>`;
+        container.innerHTML = `<p class="text-xs text-slate-500">ยังไม่มีรูปตารางเรียน</p>`;
       }
     }
 
@@ -849,8 +881,8 @@
       const dateVal = document.getElementById('hw-date').value;
       const noDeadline = document.getElementById('hw-no-deadline').checked;
 
-      if (!title) return alert('กรุณากรอกชื่อการบ้าน / วิชา');
-      if (!noDeadline && !dateVal) return alert('กรุณาระบุวันกำหนดส่ง หรือติ๊กเลือก "ไม่มีกำหนดส่ง"');
+      if (!title) return alert('กรุณากรอกชื่อการบ้าน');
+      if (!noDeadline && !dateVal) return alert('กรุณาระบุวันส่ง');
 
       if (!window.db.chenHomework) window.db.chenHomework = [];
       window.db.chenHomework.push({
@@ -888,7 +920,7 @@
       const container = document.getElementById('homework-list');
       const hwList = window.db.chenHomework || [];
       if (hwList.length === 0) {
-        container.innerHTML = `<p class="text-slate-400 text-center text-xs py-4">ไม่มีการบ้านที่ค้างอยู่</p>`;
+        container.innerHTML = `<p class="text-slate-400 text-center text-xs py-4">ไม่มีการบ้านค้างอยู่</p>`;
         return;
       }
 
@@ -897,44 +929,31 @@
 
       container.innerHTML = hwList.map(hw => {
         let warningBadge = '';
-        let dateDisplay = 'ไม่มีกำหนดส่ง (ทำได้เรื่อยๆ)';
+        let dateDisplay = 'ไม่มีกำหนดส่ง';
 
         if (hw.dueDate) {
           dateDisplay = `กำหนดส่ง: ${hw.dueDate}`;
           const dueObj = new Date(hw.dueDate);
           dueObj.setHours(0,0,0,0);
-
-          const diffTime = dueObj - today;
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          const diffDays = Math.ceil((dueObj - today) / (1000 * 60 * 60 * 24));
 
           if (!hw.done) {
-            if (diffDays < 0) {
-              warningBadge = `<span class="bg-red-950 text-red-400 border border-red-700 text-[10px] px-2 py-0.5 rounded-full">เลยกำหนด!</span>`;
-            } else if (diffDays === 0) {
-              warningBadge = `<span class="bg-red-900 text-red-300 border border-red-500 text-[10px] px-2 py-0.5 rounded-full font-bold animate-pulse">ส่งวันนี้!</span>`;
-            } else if (diffDays <= 2) {
-              warningBadge = `<span class="bg-amber-950 text-amber-300 border border-amber-700 text-[10px] px-2 py-0.5 rounded-full">ใกล้ส่ง (อีก ${diffDays} วัน)</span>`;
-            }
+            if (diffDays < 0) warningBadge = `<span class="bg-red-950 text-red-400 text-[10px] px-2 py-0.5 rounded-full">เลยกำหนด!</span>`;
+            else if (diffDays === 0) warningBadge = `<span class="bg-red-900 text-red-300 text-[10px] px-2 py-0.5 rounded-full font-bold">ส่งวันนี้!</span>`;
+            else if (diffDays <= 2) warningBadge = `<span class="bg-amber-950 text-amber-300 text-[10px] px-2 py-0.5 rounded-full">อีก ${diffDays} วัน</span>`;
           }
-        } else {
-          warningBadge = `<span class="bg-slate-800 text-sky-400 border border-slate-700 text-[10px] px-2 py-0.5 rounded-full">ทำได้เรื่อยๆ</span>`;
         }
 
         return `
           <div class="bg-[#0b132b] border border-slate-700 rounded-2xl p-3 shadow-sm flex items-center justify-between text-xs">
             <label class="flex items-center gap-2.5 cursor-pointer flex-1">
-              <input type="checkbox" ${hw.done ? 'checked' : ''} onchange="toggleHomeworkStatus(${hw.id})" class="w-4 h-4 rounded text-sky-500 focus:ring-sky-400">
+              <input type="checkbox" ${hw.done ? 'checked' : ''} onchange="toggleHomeworkStatus(${hw.id})" class="w-4 h-4 rounded text-sky-500">
               <div class="${hw.done ? 'line-through text-slate-500' : 'text-slate-100'}">
                 <p class="font-medium">${hw.title}</p>
                 <p class="text-[10px] text-slate-400">${dateDisplay} ${warningBadge}</p>
               </div>
             </label>
-            <div class="flex items-center gap-2">
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${hw.done ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-slate-800 text-slate-400'}">
-                ${hw.done ? 'เสร็จแล้ว' : 'ยังไม่เสร็จ'}
-              </span>
-              <button onclick="deleteHomework(${hw.id})" class="text-slate-400 hover:text-red-500">🗑️</button>
-            </div>
+            <button onclick="deleteHomework(${hw.id})" class="text-slate-400 hover:text-red-500 ml-2">🗑️</button>
           </div>
         `;
       }).join('');
